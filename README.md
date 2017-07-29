@@ -15,12 +15,12 @@ https://docs.google.com/spreadsheets/d/1i_Y9VOs0Lj5b1QL7nvfUpk-uBfy_Bl9749DqYtbZ
 ## Tasks
 
 ### Front-end
-#### Jake Greer
-#### Corey Rodems
+* Jake Greer
+* Corey Rodems
 
 ### Back
-#### Stephen Simon
-#### Max Schmelling
+* Stephen Simon
+* Max Schmelling
 
 
 
