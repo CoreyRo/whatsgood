@@ -46,6 +46,7 @@
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
 
 }
+
 .navbar.always-open {
     border-radius: 0;
 }
@@ -73,4 +74,19 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.categoryBtns {
+	color: #fff;
+	background: #0cf;
+	font-size: 25px;
+	border: 1px solid black;
+/*	-webkit-text-stroke: 0.5px #fff;*/
+} 
+
+
+
+
+
+
+
 
