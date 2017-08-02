@@ -44,3 +44,7 @@
     background: linear-gradient(#0af,#08c); /* Standard syntax */
 
 }
+
+.btn {
+	margin: 10px;
+}
