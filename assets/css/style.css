@@ -10,37 +10,35 @@
 	padding-bottom: 50px;
 
 }
-#logOrSign{
+#zipForm{
+	
+}
+.form-control{
+	margin-bottom: 15px !important;
+}
+#zipInput{
 	text-align: center;
 	font-size: 18pt;
+
 }
-.logBtn{
+.enterBtn{
+	margin-top: 15px;
 	border:none;
 	border-radius: 5px;
 	padding: 5px;
 	box-shadow: 2px 2px 2px #888;
 }
-#login{
+#confirmZip{
 	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
     background: -moz-linear-gradient(#0af,#08c); /* Firefox 3.6-15 */
     background: linear-gradient(#0af,#08c); /* Standard syntax */
 
 }
-#login:hover{
+#confirmZip:hover{
 	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
     background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
-
-}
-#signup{
-
-}
-#signup:hover{
-	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
-    background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
-    background: -moz-linear-gradient(#0af,#08c); /* Firefox 3.6-15 */
-    background: linear-gradient(#0af,#08c); /* Standard syntax */
 
 }
