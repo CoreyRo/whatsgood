@@ -28,9 +28,10 @@
 	margin-top: 15px;
 	border:none;
 	border-radius: 5px;
-	padding: 5px;
+
 	box-shadow: 2px 2px 2px #888;
 }
+
 #confirmZip{
 	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
@@ -45,6 +46,7 @@
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
 
 }
+
 .navbar.always-open {
     border-radius: 0;
 }
@@ -58,13 +60,16 @@
   border-top: 1px solid transparent;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
 }
-/*.navbar.always-open .navbar-collapse.collapse {
+.navbar.always-open .navbar-collapse.collapse {
   display: none!important;
+}
+.navbar.always-open .navbar-collapse.collapse.in {
+  display: block!important;
 }
 .navbar.always-open .navbar-nav {
   float: none!important;
   margin: 7.5px -15px;
-}*/
+}
 .navbar.always-open .navbar-nav>li {
   float: none;
 }
@@ -72,3 +77,12 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+.categoryBtns {
+	color: #fff;
+	background: #0cf;
+	font-size: 25px;
+	border: 1px solid black;
+/*	-webkit-text-stroke: 0.5px #fff;*/
+} 
+
