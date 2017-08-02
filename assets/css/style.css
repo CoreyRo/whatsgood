@@ -28,9 +28,10 @@
 	margin-top: 15px;
 	border:none;
 	border-radius: 5px;
-	padding: 5px;
+
 	box-shadow: 2px 2px 2px #888;
 }
+
 #confirmZip{
 	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
@@ -76,6 +77,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 .categoryBtns {
 	color: #fff;
 	background: #0cf;
@@ -83,3 +85,4 @@
 	border: 1px solid black;
 /*	-webkit-text-stroke: 0.5px #fff;*/
 } 
+
