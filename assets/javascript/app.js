@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 $(document).ready(function() {
 	$("#directory").hide()
 
@@ -15,11 +16,37 @@ $(document).ready(function() {
 			storageBucket: "whatsgood-f9823.appspot.com",
 			messagingSenderId: "905439758172"
 		};
+=======
+$(document).ready(function()
+{	
+	// hide directory screen
+	$("#directory").hide()
 
-		firebase.initializeApp(config);
+	// main function for running app
+	function MainProgram()
+	{	
+		// Initialize Firebase
+			var config = {};
+			// Variable to reference the database
+			var database;
 
-		database = firebase.database();
+			config = 
+			{
+				apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
+			    authDomain: "whatsgood-f9823.firebaseapp.com",
+			    databaseURL: "https://whatsgood-f9823.firebaseio.com",
+			    projectId: "whatsgood-f9823",
+			    storageBucket: "whatsgood-f9823.appspot.com",
+			    messagingSenderId: "905439758172"
+			};
+>>>>>>> master
 
+			firebase.initializeApp(config);
+
+			database = firebase.database();
+		// end firebase initializing
+
+<<<<<<< HEAD
 		$("#confirmZip").click(function(event) {
 			event.preventDefault();
 			$("#start").hide();
@@ -32,8 +59,32 @@ $(document).ready(function() {
 			console.log("zip " + zipcode);
 			// CreateMap(zipcode, apiKey);
 
+=======
+
+		// on clicking confirm button on main screen
+		$("#confirmZip").click(function(event)
+		{
+			// prevent the page from refreshing
+			event.preventDefault();
+
+			//hide the start screen
+			$("#start").hide();
+
+			// show the directry screen
+			$("#directory").show();
+			
+			
+			console.log("Clicked confirmZip")
+
+			// variable for storing zipcode
+			var zipcode;
+			//variable for storing the api key
+			var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
+			// variable for storing the queryUrl
+>>>>>>> master
 			var queryUrl;
 
+			// giving zipcode variabel the value of the zip input on the start screen
 			zipcode = $("#zip-input").val();
 			queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=" + apiKey;
 
@@ -42,6 +93,7 @@ $(document).ready(function() {
 				method: "GET"
 			}).done(function(response) {
 				console.log(response)
+<<<<<<< HEAD
 
 				lat = response.results[0].geometry.location.lat;
 				lng = response.results[0].geometry.location.lng;
@@ -57,6 +109,9 @@ $(document).ready(function() {
 
 
 
+=======
+			})
+>>>>>>> master
 		});
 	}
 	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>')
@@ -68,6 +123,7 @@ $(document).ready(function() {
 			center: new google.maps.LatLng(-33.91722, 151.23064),
 			mapTypeId: 'roadmap'
 
+<<<<<<< HEAD
 		});
 
 		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
@@ -82,6 +138,12 @@ $(document).ready(function() {
 				icon: iconBase + 'info-i_maps.png'
 			}
 		};
+=======
+	// function for creating and displaying map
+	function CreateMap(location, key)
+	{
+		var main;
+>>>>>>> master
 
 		var features = [{
 			position: new google.maps.LatLng(-33.91721, 151.22630),
