@@ -23,6 +23,7 @@ $(document).ready(function()
 
 		$("#confirmZip").click(function(event)
 		{
+			window.location.href='directory.html';
 			event.preventDefault();
 			var zipcode;
 			var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
@@ -57,7 +58,7 @@ $(document).ready(function()
 		main.attr("width", 600);
 		main.attr("height",450);
 		main.attr("src", "https://www.google.com/maps/embed/v1/search?key=" + key + "&q=bar," + location + " allowfullscreen>");
-		$("#map").append(main);
+		$(".map").append(main);
 	}
 
 	MainProgram();
