@@ -19,7 +19,8 @@
 .form-control{
 	margin-bottom: 15px !important;
 }
-#zipInput{
+#zipInput,
+#account-interface{
 	text-align: center;
 	font-size: 18pt;
 
@@ -46,7 +47,9 @@
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
 
 }
+.navText{
 
+}
 .navbar.always-open {
     border-radius: 0;
 }
@@ -67,7 +70,7 @@
   display: block!important;
 }
 .navbar.always-open .navbar-nav {
-  float: none!important;
+  float: none !important;
   margin: 7.5px -15px;
 }
 .navbar.always-open .navbar-nav>li {
@@ -80,9 +83,52 @@
 
 .categoryBtns {
 	color: #fff;
-	background: #0cf;
+	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
+    background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
+    background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
+    background: linear-gradient(#0cf,#08c); /* Standard syntax */
+	
 	font-size: 25px;
 	border: 1px solid black;
 /*	-webkit-text-stroke: 0.5px #fff;*/
 } 
+.categoryBtns:hover{
+	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
+    background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
+    background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
+    background: linear-gradient(#0cf,#08c); /* Standard syntax */
+}
 
+#map {
+        height: 500px;
+        width:100%;
+}
+      /* Optional: Makes the sample page fill the window. */
+html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+#floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+}
+
+#account-interface
+{
+	margin-top: 15px;
+}
+#accountBox
+{
+	background-color: grey;
+	margin-top: 30px;
+}
