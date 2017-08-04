@@ -32,8 +32,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-		<script type="text/javascript" src="assets/javascript/app.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+	<script type="text/javascript" src="assets/javascript/app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
 
 
 </head>
@@ -73,7 +73,7 @@
 		</div>
 		<!-- /.container-fluid -->
 	</nav>
-	<div class="container">
+	<div id="start" class="container">
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="col-xs-2"></div>
@@ -87,6 +87,7 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<p id="zipInput">Enter your zip code</p>
+				<div id="zipError"></div>
 			</div>
 
 		</div>
@@ -98,7 +99,7 @@
 
 					<input type="number" class="form-control" id="zip-input" aria-describedby="sizing-addon2">
 					<br>
-					<button onclick= "window.location ='/directory.html';" class="enterBtn center-block" id="confirmZip">Confirm</button>
+					<button class="enterBtn center-block" id="confirmZip">Confirm</button>
 				</div>
 
 
@@ -106,9 +107,41 @@
 			</form>
 
 		</div>
-	</div>
-	
-	<script type="text/javascript" scr="assets/javascript/app.js"></script>
-</body>
 
-</html>
+	</div>
+
+	<div id="directory" class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="col-xs-2"></div>
+				<div class="col-xs-8">
+					<!-- 	<img class="img-responsive" id="brandImg" src="assets/img/placeholderBrand.png" alt="whatsgood"> -->
+
+				</div>
+				<div class="col-xs-2"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<!-- <div class="center-block"> -->
+				<button class="btn categoryBtns btn-large" id="localBtn">Local</button>
+				<button class="btn categoryBtns btn-large" id="meetupBtn">Meetups</button>
+				<button class="btn categoryBtns btn-large" id="foodBtn">Food</button>
+				<!-- </div> -->
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 map"></div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 results">
+
+			</div>
+		</div>
+
+
+	</div>
