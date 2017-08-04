@@ -46,7 +46,9 @@
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
 
 }
+.navText{
 
+}
 .navbar.always-open {
     border-radius: 0;
 }
@@ -80,9 +82,18 @@
 
 .categoryBtns {
 	color: #fff;
-	background: #0cf;
+	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
+    background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
+    background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
+    background: linear-gradient(#0cf,#08c); /* Standard syntax */
+	
 	font-size: 25px;
 	border: 1px solid black;
 /*	-webkit-text-stroke: 0.5px #fff;*/
 } 
+.categoryBtns:hover{
+	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
+    background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
+    background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
+    background: linear-gradient(#0cf,#08c); /* Standard syntax */
 
