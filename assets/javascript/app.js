@@ -1,17 +1,5 @@
 $(document).ready(function()
-<<<<<<< HEAD
 {
-	$("#directory").hide()
-
-	function MainProgram()
-	{	
-		var config = {};		// Initialize Firebase
-		var database;			// Variable to reference the database
-		var lat;
-		var lng;
-		var zipcode;
-=======
-{	
 	// hide directory screen
 	$("#directory").hide()
 
@@ -22,7 +10,9 @@ $(document).ready(function()
 			var config = {};
 			// Variable to reference the database
 			var database;
->>>>>>> 40ac5125d6848e151359c969f32671a2e5a3274c
+			
+			// variable for storing zipcode
+			var zipcode;
 
 			config = 
 			{
@@ -43,8 +33,9 @@ $(document).ready(function()
 		// on clicking confirm button on main screen
 		$("#confirmZip").click(function(event)
 		{
-<<<<<<< HEAD
+
 			event.preventDefault();
+			
 			if($("#zip-input").val() == "" || $("#zip-input").val().length < 5) {
 				$("#zipError").empty();
 				$("#zipError").append("<div class='alert alert-danger text-center'><strong>Please enter a 5 digit zipcode.</strong></div>");
@@ -84,61 +75,12 @@ $(document).ready(function()
 				})
 			}
 
-=======
-			// prevent the page from refreshing
-			event.preventDefault();
-
-			//hide the start screen
-			$("#start").hide();
-
-			// show the directry screen
-			$("#directory").show();
-			
-			
-			console.log("Clicked confirmZip")
-
-			// variable for storing zipcode
-			var zipcode;
-			//variable for storing the api key
-			var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
-			// variable for storing the queryUrl
-			var queryUrl;
-
-			// giving zipcode variabel the value of the zip input on the start screen
-			zipcode = $("#zip-input").val();
-			queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=" + apiKey;
-
-			$.ajax(
-			{
-				url: queryUrl,
-				method: "GET"
-			}).done(function(response)
-			{
-				console.log(response)
-			})
->>>>>>> 40ac5125d6848e151359c969f32671a2e5a3274c
 		});
 
 		$("#meetupBtn").on("click", function() {
 			getMeetupLocations(zipcode);
 		})
 
-	}
-
-<<<<<<< HEAD
-	function CreateMap(location)
-=======
-	// function for creating and displaying map
-	function CreateMap(location, key)
->>>>>>> 40ac5125d6848e151359c969f32671a2e5a3274c
-	{
-		var main;
-
-		main = $("<iframe>");
-		main.attr("width", 600);
-		main.attr("height",450);
-		main.attr("src", "https://www.google.com/maps/embed/v1/search?key=" + key + "&q=bar," + location + " allowfullscreen>");
-		$(".map").append(main);
 	}
 
 	function getMeetupLocations(zip) {
@@ -159,6 +101,115 @@ $(document).ready(function()
 		})
 
 	}
+
+	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>')
+	var map;
+
+	window.initMap = function(lat, lng) {
+		map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 16,
+			center: new google.maps.LatLng(-33.91722, 151.23064),
+			mapTypeId: 'roadmap'
+
+		});
+
+		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+		var icons = {
+			parking: {
+				icon: iconBase + 'parking_lot_maps.png'
+			},
+			library: {
+				icon: iconBase + 'library_maps.png'
+			},
+			info: {
+				icon: iconBase + 'info-i_maps.png'
+			}
+		};
+
+		var features = [{
+			position: new google.maps.LatLng(-33.91721, 151.22630),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91539, 151.22820),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91747, 151.22912),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91910, 151.22907),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91725, 151.23011),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91872, 151.23089),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91784, 151.23094),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91682, 151.23149),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91790, 151.23463),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91666, 151.23468),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.916988, 151.233640),
+			type: 'info'
+		}, {
+			position: new google.maps.LatLng(-33.91662347903106, 151.22879464019775),
+			type: 'parking'
+		}, {
+			position: new google.maps.LatLng(-33.916365282092855, 151.22937399734496),
+			type: 'parking'
+		}, {
+			position: new google.maps.LatLng(-33.91665018901448, 151.2282474695587),
+			type: 'parking'
+		}, {
+			position: new google.maps.LatLng(-33.919543720969806, 151.23112279762267),
+			type: 'parking'
+		}, {
+			position: new google.maps.LatLng(-33.91608037421864, 151.23288232673644),
+			type: 'parking'
+		}, {
+			position: new google.maps.LatLng(-33.91851096391805, 151.2344058214569),
+			type: 'parking'
+		}, {
+			position: new google.maps.LatLng(-33.91818154739766, 151.2346203981781),
+			type: 'parking'
+		}, {
+			position: new google.maps.LatLng(-33.91727341958453, 151.23348314155578),
+			type: 'library'
+		}];
+
+		// Create markers.
+		features.forEach(function(feature) {
+			var marker = new google.maps.Marker({
+				position: feature.position,
+				icon: icons[feature.type].icon,
+				map: map
+			});
+		});
+		
+	}
+
+
+	// function CreateMap(location, key)
+	// {
+	// 	var main;
+
+	// 	main = $("<iframe>");
+	// 	main.attr("width", 600);
+	// 	main.attr("height",450);
+	// 	main.attr("frameborder", 0);
+	// 	main.attr("id", "map");
+	// 	main.addClass("center-block");
+	// 	main.attr("src", "https://www.google.com/maps/embed/v1/place?key=" + key + "&q=" + location + "&zoom=13");
+	// 	$(".map").append(main);
+	// }	
 
 	MainProgram();
 
