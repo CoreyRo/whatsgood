@@ -1,10 +1,21 @@
 $(document).ready(function()
 {
 	// hide directory screen
-	$("#directory").hide();
-	$("#register-div").hide();
+	$("#directory").hide()
 	$("#login-div").hide()
+	$("#register-div").hide()
+	$(".loading").hide();
 
+	//for the animate.css library
+    $.fn.extend({
+        animateCss: function(animationName) {
+            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+            this.addClass('animated ' + animationName).one(animationEnd, function() {
+                $(this).removeClass('animated ' + animationName);
+            });
+            return this;
+        }
+    });
 	// main function for running app
 	function MainProgram()
 	{	
@@ -89,16 +100,23 @@ $(document).ready(function()
 			}
 
 		});
+		
 
 		$("#meetupBtn").on("click", function() {
+			$("#directory").hide();
+
+			$(".loading").show();
 			getEvents(_lat, _lng, zipcode, locations, numOfLocations);
 		});
 
 	}
 
 	function getEvents(_lat, _lng, zip, locations, numOfLocations) {
-
+		//Jake API Key
 		var key = "4f561e404155b324d1b791c124f6221";
+
+		//Corey API Key
+	/*	var key = "7e44766f4e7d46533d222a4d7f477b";*/
 		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip + "&only=name,lon,lat";
 
 		$.ajax(
@@ -108,6 +126,7 @@ $(document).ready(function()
 		}).done(function(response)
 		{
 			console.log(response);
+			
 
 			//loop through the response and retrieve the latitudes and longitudes for the meetups
 			for(var i = 0; i < numOfLocations; i++) {
@@ -115,11 +134,16 @@ $(document).ready(function()
 			}
 
 			console.log(locations);
+			
+			$(".loading").hide();
+			$("#directory").show();
 			initEvents(_lat, _lng, locations, numOfLocations);
 
 
 
+
 		});
+
 
 	}
 
@@ -179,6 +203,14 @@ $(document).ready(function()
 	}
 
 	MainProgram();
+	$(document).ajaxError(function(){
+    $(".loading").hide()
+    $("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
+    setTimeout(loadError, 2000)
+    function loadError(){
+    	window.location.reload();
+    }
+});
 
 	
 });
