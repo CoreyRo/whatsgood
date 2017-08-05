@@ -1,5 +1,22 @@
 $(document).ready(function()
 {
+	var account =
+	{
+		username: "",
+		password: "",
+		index: 0,
+
+		GetUsername()
+		{
+			this.username = $("#name-input").val().trim();
+		},
+
+		GetPassword()
+		{
+			this.password = $("#pass-input").val().trim();
+		}
+	};
+
 	// hide directory screen
 	$("#directory").hide()
 
@@ -79,6 +96,62 @@ $(document).ready(function()
 
 		$("#meetupBtn").on("click", function() {
 			getMeetupLocations(zipcode);
+		})
+
+		$("#confirmAccount").click(function(event)
+		{
+			event.preventDefault();
+			var ref = database.ref("profile");
+
+			account.GetUsername();
+			account.GetPassword();
+
+			ref.orderByChild("username").equalTo(account.username).once("value", function(snapshot)
+			{
+			    var userData;
+
+			    userData = snapshot.val();
+
+			    if (userData)
+			    {
+				    alert("Account already exists, please try again.");
+			    	$("#name-input").val("");
+			    	$("#pass-input").val("");
+			    }
+			    else
+			    {
+			    	ref.orderByChild("password").equalTo(account.password).once("value", function(snapshot)
+					{
+					    var userData;
+
+					    userData = snapshot.val();
+
+					    if(userData)
+					    {
+					    	alert("Account already exists, please try again.");
+					    	$("#name-input").val("");
+					    	$("#pass-input").val("");
+					    }
+					    else
+					    {
+					    	database.ref("/profile").push(
+							{
+								username: account.username,
+								password: account.password,
+								indexOn: account.index
+							})
+
+					    	localStorage.setItem("username", account.username);
+					    	localStorage.setItem("password", account.password);
+
+							$("#name-input").val("");
+					    	$("#pass-input").val("");	
+
+							account.index++;
+					    }
+					})
+			    }
+			});
 		})
 
 	}
@@ -195,7 +268,6 @@ $(document).ready(function()
 		});
 		
 	}
-
 
 	// function CreateMap(location, key)
 	// {
