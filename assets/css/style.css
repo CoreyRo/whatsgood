@@ -74,7 +74,7 @@
 	box-shadow: 2px 2px 2px #888;
 }
 
-#confirmZip, #confirmAccount{
+#confirmZip, #confirmAccount, #confirmReg{
 	color: #fff;
 	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
@@ -82,7 +82,7 @@
     background: linear-gradient(#0af,#08c); /* Standard syntax */
 
 }
-#confirmZip:hover, #confirmAccount:hover{
+#confirmZip:hover, #confirmAccount:hover, #confirmReg:hover{
 	color:#fff;
 	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
