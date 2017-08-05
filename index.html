@@ -108,23 +108,77 @@
 
         </div>
 
-        <div id="login-div" class="row">
-            <div class="col-xs-12" id="accountBox">
-                <p id="account-interface">
-                    Create Account
+        <div id="login-register" class="row">
+            <form>
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+					<p id="loginOrRegister"> Please <button class="txtBtn" id="newReg"> register </button> or <button class="txtBtn" id="logBtn"> login </button> 
+                    
+                    
+                    
+                </div>
+
+
+                <div class="col-xs-4"></div>
+            </form>
+
+        </div>
+
+		<div id="register-div" class="row">
+            <div class="col-xs-12" id="regBox">
+                <p class="account-interface">
+                    Create a new account
                 </p>
                 <div class="row">
                 	
                     <form>
                         <div class="col-xs-3"></div>
                         <div class="input-group col-xs-6">
-                            <input type="username" class="form-control" id="name-input" aria-describedby="sizing-addon2">
-                            <input type="password" class="form-control" id="pass-input" aria-describedby="sizing-addon2">
+                        	<div class="form-group">
+	                        	<label for="name-input">Username</label>
+	                            	<input type="username" class="form-control" id="name-input" aria-describedby="sizing-addon2">
+                        	</div>
+                        	<div class="form-group">
+	                            <label for="pass-input">Password</label>
+	                            	<input type="password" class="form-control" id="pass-input" aria-describedby="sizing-addon2">
+                        	</div>
+                        	<div class="form-group">
+	                            <label for="email-input">Email</label>
+	                            	<input type="email" class="form-control" id="email-input" aria-describedby="sizing-addon2">
+                        	</div>
+                            <button class="center-block" id="confirmReg">Create</button>
+                    	</div>
+                    	<div class="col-xs-3"></div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+        <div id="login-div" class="row">
+            <div class="col-xs-12" id="logBox">
+                <p class="account-interface">
+                    Login with your account
+                </p>
+                <div class="row">
+                	
+                    <form>
+                        <div class="col-xs-3"></div>
+                        <div class="input-group col-xs-6">
+                        <div class="form-group">
+	                        	<label for="myname-input">Username</label>
+	                            	<input type="username" class="form-control" id="myname-input" aria-describedby="sizing-addon2">
+                        	</div>
+                        	<div class="form-group">
+	                        	<label for="mypass-input">Password</label>
+	                            	<input type="password" class="form-control" id="mypass-input" aria-describedby="sizing-addon2">
+                        	</div>
+                            
                             <button class="center-block" id="confirmAccount">Create</button>
                     	</div>
                     	<div class="col-xs-3"></div>
                     </form>
-                   
+
                 </div>
             </div>
 
