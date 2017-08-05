@@ -27,7 +27,7 @@
 		sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <title>whatsgood</title>
-
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
@@ -78,7 +78,8 @@
             <div class="col-xs-12">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-8">
-                    <img class="img-responsive" id="brandImg" src="assets/img/placeholderBrand.png" alt="whatsgood">
+                	<h1 id="brandH1">whatsgood?</h1>
+                    <!-- <img class="img-responsive" id="brandImg" src="assets/img/placeholderBrand.png" alt="whatsgood"> -->
 
                 </div>
                 <div class="col-xs-2"></div>
@@ -107,20 +108,23 @@
 
         </div>
 
-        <div class="row">
+        <div id="login-div" class="row">
             <div class="col-xs-12" id="accountBox">
                 <p id="account-interface">
                     Create Account
                 </p>
                 <div class="row">
+                	
                     <form>
-                        <div class="col-xs-4"></div>
-                        <div class="input-group col-xs-4">
+                        <div class="col-xs-3"></div>
+                        <div class="input-group col-xs-6">
                             <input type="username" class="form-control" id="name-input" aria-describedby="sizing-addon2">
                             <input type="password" class="form-control" id="pass-input" aria-describedby="sizing-addon2">
-                            <button class="enterBtn center-block" id="confirmAccount">Create</button>
+                            <button class="center-block" id="confirmAccount">Create</button>
                     	</div>
+                    	<div class="col-xs-3"></div>
                     </form>
+                   
                 </div>
             </div>
 

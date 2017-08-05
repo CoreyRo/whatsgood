@@ -1,7 +1,21 @@
 $(document).ready(function()
 {
 	// hide directory screen
-	$("#directory").hide()
+	$("#directory, #login-div").hide()
+	setTimeout(loginAppear, 1500);
+	function loginAppear(){
+		$("#login-div").show().animateCss("slideInUp");
+	}
+	//for the animate.css library
+    $.fn.extend({
+        animateCss: function(animationName) {
+            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+            this.addClass('animated ' + animationName).one(animationEnd, function() {
+                $(this).removeClass('animated ' + animationName);
+            });
+            return this;
+        }
+    });
 
 	// main function for running app
 	function MainProgram()
@@ -78,7 +92,17 @@ $(document).ready(function()
 		});
 
 		$("#meetupBtn").on("click", function() {
+			event.preventDefault();
 			getMeetupLocations(zipcode);
+		})
+
+		$("#confirmAccount").on("click", function(){
+			event.preventDefault();
+			$("#login-div").animateCss("slideOutDown")
+			setTimeout(hideLogin, 650)
+			function hideLogin(){
+				$("#login-div").hide();
+			}
 		})
 
 	}
