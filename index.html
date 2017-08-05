@@ -26,6 +26,8 @@
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="
 		sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+ <title>whatsgood</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     
@@ -57,89 +59,116 @@
 				<a class="navbar-brand" id="navbrand" href="index.html">
 					<img width="24" id="navBrandImg" src="assets/img/smallBrand.png">
 				</a>
-			</div>
+            </div>
 
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li class="dropdown">
-						<li><a class="navText" href="index.html">Home</a></li>
-						<li><a class="navText" href="#">Help</a></li>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<!-- end navbar -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+
+                    <li class="dropdown">
+
+                        <li><a class="navText" href="index.html">Home</a></li>
+                        <li><a class="navText" href="#">Help</a></li>
 
 
-	<!-- start screen -->
-	<div id="start" class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="col-xs-2"></div>
-				<div class="col-xs-8">
-					<img class="img-responsive" id="brandImg" src="assets/img/placeholderBrand.png" alt="whatsgood">
-				</div>
-				<div class="col-xs-2"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<p id="zipInput">Enter your zip code</p>
-			</div>
-		</div>
+                </ul>
+                </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div id="start" class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-8">
+                	<h1 id="brandH1">whatsgood?</h1>
+                    <!-- <img class="img-responsive" id="brandImg" src="assets/img/placeholderBrand.png" alt="whatsgood"> -->
 
-		<div id="zipForm" class="row">
-			<form>
-				<div class="col-xs-4"></div>
-				<div class="input-group col-xs-4">
-					<input type="number" class="form-control" id="zip-input" aria-describedby="sizing-addon2">
-					<br>
-					<button class="enterBtn center-block" id="confirmZip">Confirm</button>
-				</div>
-				<div class="col-xs-4"></div>
-			</form>
-		</div>
-	</div>
-	<!-- end start screen -->
-		
+                </div>
+                <div class="col-xs-2"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12" id="zipError">
+                <p id="zipInput">Enter your zip code</p>
+            </div>
 
-	<!-- directory screen -->
-	<div id="directory" class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="col-xs-2"></div>
-				<div class="col-xs-8">
-				</div>
-				<div class="col-xs-2"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 text-center">
-				<button class="btn categoryBtns btn-large" id="localBtn">Local</button>
-				<button class="btn categoryBtns btn-large" id="meetupBtn">Meetups</button>
-				<button class="btn categoryBtns btn-large" id="foodBtn">Food</button>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 map"></div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 results"></div>
-		</div>
-	</div>
-	<!-- end directory screen -->
+        </div>
+
+        <div id="zipForm" class="row">
+            <form>
+                <div class="col-xs-4"></div>
+                <div class="input-group col-xs-4">
+
+                    <input type="number" class="form-control" id="zip-input" aria-describedby="sizing-addon2">
+                    <br>
+                    <button class="enterBtn center-block" id="confirmZip">Confirm</button>
+                </div>
 
 
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$("#directory").hide();
-			$("#confirmZip").on("click", function() {
-				$("#start").hide();
-				$("#directory").show();
-			});
-		});
-	</script>
-</body>
-</html>
+                <div class="col-xs-4"></div>
+            </form>
+
+        </div>
+
+        <div id="login-div" class="row">
+            <div class="col-xs-12" id="accountBox">
+                <p id="account-interface">
+                    Create Account
+                </p>
+                <div class="row">
+                	
+                    <form>
+                        <div class="col-xs-3"></div>
+                        <div class="input-group col-xs-6">
+                            <input type="username" class="form-control" id="name-input" aria-describedby="sizing-addon2">
+                            <input type="password" class="form-control" id="pass-input" aria-describedby="sizing-addon2">
+                            <button class="center-block" id="confirmAccount">Create</button>
+                    	</div>
+                    	<div class="col-xs-3"></div>
+                    </form>
+                   
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+        <div id="directory" class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-8">
+                        <!-- 	<img class="img-responsive" id="brandImg" src="assets/img/placeholderBrand.png" alt="whatsgood"> -->
+
+                    </div>
+                    <div class="col-xs-2"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <!-- <div class="center-block"> -->
+                    <button class="btn categoryBtns btn-large" id="localBtn">Local</button>
+                    <button class="btn categoryBtns btn-large" id="meetupBtn">Meetups</button>
+                    <button class="btn categoryBtns btn-large" id="foodBtn">Food</button>
+                    <!-- </div> -->
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 center-block" id="map"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 results">
+
+                </div>
+            </div>
+
+
+        </div>

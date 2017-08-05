@@ -3,6 +3,9 @@ $(document).ready(function()
 	// hide directory screen
 	$("#directory").hide()
 
+	var lat = 0.0;
+	var lng = 0.0;
+
 	// main function for running app
 	function MainProgram()
 	{	
@@ -36,7 +39,7 @@ $(document).ready(function()
 
 			event.preventDefault();
 			
-			if($("#zip-input").val() == "" || $("#zip-input").val().length < 5) {
+			if($("#zip-input").val().length < 5) {
 				$("#zipError").empty();
 				$("#zipError").append("<div class='alert alert-danger text-center'><strong>Please enter a 5 digit zipcode.</strong></div>");
 				console.log($("#zip-input").val().length);
@@ -72,6 +75,8 @@ $(document).ready(function()
 					console.log(lng);
 
 
+					initMap(lat, lng);
+
 				})
 			}
 
@@ -105,10 +110,13 @@ $(document).ready(function()
 	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>')
 	var map;
 
-	window.initMap = function(lat, lng) {
+	function initMap(_lat, _lng) {
+
+		console.log(_lat + ", " + _lng);
+
 		map = new google.maps.Map(document.getElementById('map'), {
-			zoom: 16,
-			center: new google.maps.LatLng(-33.91722, 151.23064),
+			zoom: 12,
+			center: new google.maps.LatLng(_lat, _lng),
 			mapTypeId: 'roadmap'
 
 		});
