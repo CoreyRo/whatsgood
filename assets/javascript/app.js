@@ -54,7 +54,7 @@ $(document).ready(function()
 
 			event.preventDefault();
 			
-			if($("#zip-input").val().length < 5) {
+			if($("#zip-input").val().length != 5) {
 				$("#zipError").empty();
 				$("#zipError").append("<div class='alert alert-danger text-center'><strong>Please enter a 5 digit zipcode.</strong></div>");
 				console.log($("#zip-input").val().length);
