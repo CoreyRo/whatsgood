@@ -10,7 +10,23 @@
 	padding-bottom: 200px;
 
 }
-#accountBox{
+#loginOrRegister{
+	margin-top: 10px;
+	margin-bottom: 50px;
+	text-align: center;
+}
+.txtBtn{
+	color:#0cf;
+	background:none;
+	border:none;
+	margin:0;
+	padding:0;
+}
+.txtBtn:hover{
+
+	color:#08c;
+}
+#regBox, #logBox{
 	border-radius: 5px;
 	box-shadow: 5px 2px 5px black;
 	background: -webkit-linear-gradient(#ccc,#888); /* Safari 5.1-6.0 */
@@ -18,7 +34,7 @@
     background: -moz-linear-gradient(#ccc,#888); /* Firefox 3.6-15 */
     background: linear-gradient(#ccc,#888); /* Standard syntax */
 }
-#confirmAccount{
+#confirmAccount, #confirmReg{
 	margin-bottom: 10px;
 	border:none;
 	font-size: 14pt;
@@ -29,8 +45,8 @@
     background: linear-gradient(#ccc,#888); /* Standard syntax */
 	box-shadow: 2px 2px 2px black;
 }
-#login-div{
-	position: fixed;
+#login-div, #register-div{
+	position: relative;
 	bottom:0;
 	margin:0 auto;
 	width:90%;
@@ -45,7 +61,7 @@
 	margin-bottom: 15px !important;
 }
 #zipInput,
-#account-interface{
+.account-interface{
 	text-align: center;
 	font-size: 18pt;
 
