@@ -74,7 +74,7 @@
 	box-shadow: 2px 2px 2px #888;
 }
 
-#confirmZip, #confirmAccount{
+#confirmZip, #confirmAccount, #confirmReg{
 	color: #fff;
 	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
@@ -82,7 +82,7 @@
     background: linear-gradient(#0af,#08c); /* Standard syntax */
 
 }
-#confirmZip:hover, #confirmAccount:hover{
+#confirmZip:hover, #confirmAccount:hover, #confirmReg:hover{
 	color:#fff;
 	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
@@ -125,7 +125,9 @@
 }
 
 .categoryBtns {
+	margin-top: 20px;
 	color: #fff;
+	box-shadow: 3px 3px 5px #888;
 	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
     background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
@@ -143,8 +145,11 @@
 }
 
 #map {
-        height: 500px;
-        width:100%;
+	border: 2px solid black;
+	box-shadow: 4px 4px 6px #888;
+  	height: 400px;
+    width: 100%;
+    margin: 50px 0px 50px 0px;
 }
       /* Optional: Makes the sample page fill the window. */
 html, body {
