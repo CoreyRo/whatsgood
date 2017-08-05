@@ -19,7 +19,8 @@
 .form-control{
 	margin-bottom: 15px !important;
 }
-#zipInput{
+#zipInput,
+#account-interface{
 	text-align: center;
 	font-size: 18pt;
 
@@ -97,6 +98,7 @@
     background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
 }
+
 #map {
         height: 500px;
         width:100%;
@@ -119,4 +121,14 @@ html, body {
         font-family: 'Roboto','sans-serif';
         line-height: 30px;
         padding-left: 10px;
-      }
+}
+
+#account-interface
+{
+	margin-top: 15px;
+}
+#accountBox
+{
+	background-color: grey;
+	margin-top: 30px;
+}

@@ -1,24 +1,5 @@
-<<<<<<< HEAD
-$(document).ready(function() {
-	$("#directory").hide()
-
-	function MainProgram() {
-		var config = {}; // Initialize Firebase
-		var database; // Variable to reference the database
-		var lat;
-		var lng;
-
-		config = {
-			apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
-			authDomain: "whatsgood-f9823.firebaseapp.com",
-			databaseURL: "https://whatsgood-f9823.firebaseio.com",
-			projectId: "whatsgood-f9823",
-			storageBucket: "whatsgood-f9823.appspot.com",
-			messagingSenderId: "905439758172"
-		};
-=======
 $(document).ready(function()
-{	
+{
 	// hide directory screen
 	$("#directory").hide()
 
@@ -29,6 +10,9 @@ $(document).ready(function()
 			var config = {};
 			// Variable to reference the database
 			var database;
+			
+			// variable for storing zipcode
+			var zipcode;
 
 			config = 
 			{
@@ -39,81 +23,85 @@ $(document).ready(function()
 			    storageBucket: "whatsgood-f9823.appspot.com",
 			    messagingSenderId: "905439758172"
 			};
->>>>>>> master
 
 			firebase.initializeApp(config);
 
 			database = firebase.database();
 		// end firebase initializing
 
-<<<<<<< HEAD
-		$("#confirmZip").click(function(event) {
-			event.preventDefault();
-			$("#start").hide();
-			$("#directory").show();
-
-
-			console.log("Clicked confirmZip")
-			var apiKey = "AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po";
-			var zipcode = $("#zip-input").val();
-			console.log("zip " + zipcode);
-			// CreateMap(zipcode, apiKey);
-
-=======
 
 		// on clicking confirm button on main screen
 		$("#confirmZip").click(function(event)
 		{
-			// prevent the page from refreshing
+
 			event.preventDefault();
-
-			//hide the start screen
-			$("#start").hide();
-
-			// show the directry screen
-			$("#directory").show();
 			
-			
-			console.log("Clicked confirmZip")
+			if($("#zip-input").val() == "" || $("#zip-input").val().length < 5) {
+				$("#zipError").empty();
+				$("#zipError").append("<div class='alert alert-danger text-center'><strong>Please enter a 5 digit zipcode.</strong></div>");
+				console.log($("#zip-input").val().length);
+			}
+			else {
+				console.log($("#zip-input").val().length);
+				$("#start").hide();
+				$("#directory").show();
+				$("#zipError").empty();
+				
+				
+				console.log("Clicked confirmZip")
 
-			// variable for storing zipcode
-			var zipcode;
-			//variable for storing the api key
-			var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
-			// variable for storing the queryUrl
->>>>>>> master
-			var queryUrl;
+				var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
+				var queryUrl;
 
-			// giving zipcode variabel the value of the zip input on the start screen
-			zipcode = $("#zip-input").val();
-			queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=" + apiKey;
+				zipcode = $("#zip-input").val();
 
-			$.ajax({
-				url: queryUrl,
-				method: "GET"
-			}).done(function(response) {
-				console.log(response)
-<<<<<<< HEAD
+				queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=" + apiKey;
 
-				lat = response.results[0].geometry.location.lat;
-				lng = response.results[0].geometry.location.lng;
+				$.ajax(
+				{
+					url: queryUrl,
+					method: "GET"
+				}).done(function(response)
+				{
+					console.log(response)
 
-				console.log(lat);
-				console.log(lng);
-				initMap(lat, lng);
+					lat = response.results[0].geometry.location.lat;
+					lng = response.results[0].geometry.location.lng;
+
+					console.log(lat);
+					console.log(lng);
 
 
+				})
+			}
 
-			})
-
-
-
-
-=======
-			})
->>>>>>> master
 		});
+
+		$("#meetupBtn").on("click", function() {
+			getMeetupLocations(zipcode);
+		})
+
 	}
+
+	function getMeetupLocations(zip) {
+
+		key = "4f561e404155b324d1b791c124f6221";
+		queryUrl = "https://api.meetup.com/2/events/?radius=25.0&order=time&key="+ key + "&zipcode=" + zip + "&sign=true";
+
+
+		$.ajax(
+		{
+			url: queryUrl,
+			method: "GET"
+		}).done(function(response)
+		{
+			console.log(response)
+
+
+		})
+
+	}
+
 	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>')
 	var map;
 
@@ -123,7 +111,6 @@ $(document).ready(function()
 			center: new google.maps.LatLng(-33.91722, 151.23064),
 			mapTypeId: 'roadmap'
 
-<<<<<<< HEAD
 		});
 
 		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
@@ -138,12 +125,6 @@ $(document).ready(function()
 				icon: iconBase + 'info-i_maps.png'
 			}
 		};
-=======
-	// function for creating and displaying map
-	function CreateMap(location, key)
-	{
-		var main;
->>>>>>> master
 
 		var features = [{
 			position: new google.maps.LatLng(-33.91721, 151.22630),
@@ -230,9 +211,7 @@ $(document).ready(function()
 	// 	$(".map").append(main);
 	// }	
 
-
-
-
 	MainProgram();
-});
+
 	
+});
