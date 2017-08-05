@@ -1,21 +1,10 @@
 $(document).ready(function()
 {
 	// hide directory screen
-	$("#directory").hide()
+	$("#directory").hide();
+	$("#register-div").hide();
 	$("#login-div").hide()
-	$("#register-div").hide()
-	$(".loading").hide();
 
-	//for the animate.css library
-    $.fn.extend({
-        animateCss: function(animationName) {
-            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-            this.addClass('animated ' + animationName).one(animationEnd, function() {
-                $(this).removeClass('animated ' + animationName);
-            });
-            return this;
-        }
-    });
 	// main function for running app
 	function MainProgram()
 	{	
@@ -27,7 +16,7 @@ $(document).ready(function()
 			var zipcode;
 			//array of event locations
 			var locations = [];
-			//Number of returned 
+			//Number of returned events
 			var numOfLocations = 25;
 			//Initial Lat
 			var _lat;
@@ -100,36 +89,16 @@ $(document).ready(function()
 			}
 
 		});
-		$("#newReg").on("click", function(){
-			event.preventDefault();
-			$("#login-div").hide();
-			$("#register-div").show().animateCss("slideInUp");
-		})
-
-		$("#logBtn").on("click", function(){
-			event.preventDefault();
-			$("#register-div").hide();
-			$("#login-div").show().animateCss("slideInUp");
-		})
-
 
 		$("#meetupBtn").on("click", function() {
-			$("#directory").hide();
-
-			$(".loading").show();
 			getEvents(_lat, _lng, zipcode, locations, numOfLocations);
 		});
-
-
 
 	}
 
 	function getEvents(_lat, _lng, zip, locations, numOfLocations) {
-		//Jake API Key
-		// var key = "4f561e404155b324d1b791c124f6221";
 
-		//Corey API Key
-		var key = "7e44766f4e7d46533d222a4d7f477b";
+		var key = "4f561e404155b324d1b791c124f6221";
 		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip + "&only=name,lon,lat";
 
 		$.ajax(
@@ -140,21 +109,24 @@ $(document).ready(function()
 		{
 			console.log(response);
 
-
 			//loop through the response and retrieve the latitudes and longitudes for the meetups
 			for(var i = 0; i < numOfLocations; i++) {
 				locations[i] = { name: response[i].name, lat: response[i].lat, lon: response[i].lon };
 			}
 
 			console.log(locations);
-			$(".loading").hide();
-			$("#directory").show();
 			initEvents(_lat, _lng, locations, numOfLocations);
 
 
 
 		});
 
+	}
+
+	function yelp() {
+		
+		var key = "4f561e404155b324d1b791c124f6221";
+		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip + "&only=name,lon,lat";
 
 	}
 
@@ -200,7 +172,6 @@ $(document).ready(function()
 			type: 'info',
 			name: locations[i].name
 			};
-			
 		}
 
 		// Create markers.
@@ -215,14 +186,6 @@ $(document).ready(function()
 	}
 
 	MainProgram();
-	$(document).ajaxError(function(){
-    $(".loading").hide()
-    $("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
-    setTimeout(loadError, 2000)
-    function loadError(){
-    	window.location.reload();
-    }
-});
 
 	
 });

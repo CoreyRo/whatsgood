@@ -144,7 +144,7 @@
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
 }
 
-#map {
+#map, #loadImg {
 	border: 2px solid black;
 	box-shadow: 4px 4px 6px #888;
   	height: 400px;
