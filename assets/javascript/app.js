@@ -9,10 +9,13 @@ $(document).ready(function()
 		// Initialize Firebase
 			var config = {};
 			// Variable to reference the database
-			var database;
-			
+			var database;		
 			// variable for storing zipcode
 			var zipcode;
+			//array of event locations
+			var locations = [];
+			//Number of returned events
+			var numOfLocations = 5;
 
 			config = 
 			{
@@ -35,7 +38,7 @@ $(document).ready(function()
 		{
 
 			event.preventDefault();
-			
+
 			if($("#zip-input").val() == "" || $("#zip-input").val().length < 5) {
 				$("#zipError").empty();
 				$("#zipError").append("<div class='alert alert-danger text-center'><strong>Please enter a 5 digit zipcode.</strong></div>");
@@ -78,16 +81,15 @@ $(document).ready(function()
 		});
 
 		$("#meetupBtn").on("click", function() {
-			getMeetupLocations(zipcode);
-		})
+			getEvents(lat, lng, zipcode, locations, numOfLocations);
+		});
 
 	}
 
-	function getMeetupLocations(zip) {
+	function getEvents(lat, lng, zip, locations, numOfLocations) {
 
-		key = "4f561e404155b324d1b791c124f6221";
-		queryUrl = "https://api.meetup.com/2/events/?radius=25.0&order=time&key="+ key + "&zipcode=" + zip + "&sign=true";
-
+		var key = "4f561e404155b324d1b791c124f6221";
+		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip;
 
 		$.ajax(
 		{
@@ -95,17 +97,26 @@ $(document).ready(function()
 			method: "GET"
 		}).done(function(response)
 		{
-			console.log(response)
+			console.log(response);
+
+			//loop through the response and retrieve the latitudes and longitudes for the meetups
+			for(var i = 0; i < numOfLocations; i++) {
+				locations[i] = { name: response[i].name, lat: response[i].lat, lon: response[i].lon };
+			}
+
+			console.log(locations);
+			initMap(lat, lng, locations, numOfLocations);
 
 
-		})
+
+		});
 
 	}
 
 	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>')
 	var map;
 
-	window.initMap = function(lat, lng) {
+	window.initMap = function(lat, lng, locations, numOfLocations) {
 		map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 16,
 			center: new google.maps.LatLng(-33.91722, 151.23064),
@@ -126,64 +137,16 @@ $(document).ready(function()
 			}
 		};
 
-		var features = [{
-			position: new google.maps.LatLng(-33.91721, 151.22630),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91539, 151.22820),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91747, 151.22912),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91910, 151.22907),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91725, 151.23011),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91872, 151.23089),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91784, 151.23094),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91682, 151.23149),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91790, 151.23463),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91666, 151.23468),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.916988, 151.233640),
-			type: 'info'
-		}, {
-			position: new google.maps.LatLng(-33.91662347903106, 151.22879464019775),
-			type: 'parking'
-		}, {
-			position: new google.maps.LatLng(-33.916365282092855, 151.22937399734496),
-			type: 'parking'
-		}, {
-			position: new google.maps.LatLng(-33.91665018901448, 151.2282474695587),
-			type: 'parking'
-		}, {
-			position: new google.maps.LatLng(-33.919543720969806, 151.23112279762267),
-			type: 'parking'
-		}, {
-			position: new google.maps.LatLng(-33.91608037421864, 151.23288232673644),
-			type: 'parking'
-		}, {
-			position: new google.maps.LatLng(-33.91851096391805, 151.2344058214569),
-			type: 'parking'
-		}, {
-			position: new google.maps.LatLng(-33.91818154739766, 151.2346203981781),
-			type: 'parking'
-		}, {
-			position: new google.maps.LatLng(-33.91727341958453, 151.23348314155578),
-			type: 'library'
-		}];
+		var features = [];
+
+		for(var i = 0; i < numOfLocations; i++) {
+
+			features[i] = {
+			position: new google.maps.LatLng(locations[i].lat, locations[i].lon),
+			type: 'info',
+			name: locations[i].name
+			};
+		}
 
 		// Create markers.
 		features.forEach(function(feature) {

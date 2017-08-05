@@ -90,6 +90,7 @@
 	
 	font-size: 25px;
 	border: 1px solid black;
+	margin-bottom: 20px;
 /*	-webkit-text-stroke: 0.5px #fff;*/
 } 
 .categoryBtns:hover{
@@ -100,7 +101,8 @@
 }
 
 #map {
-        height: 500px;
+		padding: 30px;
+        height: 250px;
         width:100%;
 }
       /* Optional: Makes the sample page fill the window. */
