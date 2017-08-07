@@ -148,7 +148,6 @@ body{
 }
 
 #map, #loadImg {
-
 	border: 2px solid black;
 	overflow: hidden;
 	box-shadow: 4px 4px 6px #888;
@@ -209,20 +208,3 @@ html, body {
 #accountBox{
 	background-color: grey;
 	margin-top: 30px;
-}
-footer {
-
-	margin:0 0 -50px 0;
-	text-align: center;
-	background-color: #e7e7e7;
-    position: absolute;
-    height: 50px;
-    bottom: 0;
-    width: 100%;
-}
-.footer{
-	margin-top: 100px;
-}
-#footer-text{
-	margin-top: 25px;
-}
