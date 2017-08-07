@@ -1,3 +1,6 @@
+body{
+	margin:0 0 0 0;
+}
 #navbrand{
 	color:#0cf;
 }
@@ -145,12 +148,41 @@
 }
 
 #map, #loadImg {
+
 	border: 2px solid black;
+	overflow: hidden;
 	box-shadow: 4px 4px 6px #888;
-  	height: 400px;
+  	height: 600px;
     width: 100%;
     margin: 50px 0px 50px 0px;
 }
+#new-zip-input{
+	margin-bottom: 100px;
+}
+
+@media only screen and (max-width: 770px) {
+    #map, #loadImg {
+    	
+        border: 2px solid black;
+		overflow: hidden;
+		box-shadow: 4px 4px 6px #888;
+	  	height: 400px;
+	    width: 80%;
+	    margin: 50px 0px 50px -40px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    #map, #loadImg {
+        border: 2px solid black;
+		overflow: hidden;
+		box-shadow: 4px 4px 6px #888;
+	  	height: 400px;
+	    width: 80%;
+	    margin: 50px 0px 50px -35px;
+    }
+}
+
       /* Optional: Makes the sample page fill the window. */
 html, body {
         height: 100%;
@@ -171,12 +203,26 @@ html, body {
         padding-left: 10px;
 }
 
-#account-interface
-{
+#account-interface{
 	margin-top: 15px;
 }
-#accountBox
-{
+#accountBox{
 	background-color: grey;
 	margin-top: 30px;
+}
+footer {
 
+	margin:0 0 -50px 0;
+	text-align: center;
+	background-color: #e7e7e7;
+    position: absolute;
+    height: 50px;
+    bottom: 0;
+    width: 100%;
+}
+.footer{
+	margin-top: 100px;
+}
+#footer-text{
+	margin-top: 25px;
+}
