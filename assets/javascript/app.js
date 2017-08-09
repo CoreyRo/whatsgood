@@ -125,8 +125,26 @@ $(document).ready(function () {
 			//call the getFood function that runs an ajax call to the local google api
 			initFood(lat, lng, zipcode, locations);
 		});
+		$("#chatBtn").on("click", function(){
+			console.log("clicked");
+			var chatDiv = $('<div class="row"> <div class="col-xs-12 jumbotron list-messages" id="listMessages">' +
+				'<ul></ul>' + 
+				'</div></div>' + 
+				'<div class="row"> <div class="col-xs-12 jumbotron new-message" id="newMessage">' +
+				'<input type="text" id="chatName">' + 
+				'<input type="text" id="chatText" placeholder="text..."><button class="enterBtn" id="sendChat">Send</button><button class="enterBtn btn-pimary" id="clsChat">Close</button><button class="enterBtn btn-danger" id="clrChat">Clear All</button>' +
+				'</div></div>'
+				);
+			$("#chat").append(chatDiv);
+			chatApp(database);
+			listChat(database);
 
-	
+
+		})
+		$("#clsChat").on("click", function(){
+			$("#listMessages").hide();
+			$("#newMessage").hide();
+		})
 		$("#newReg").on("click", function () {
 			event.preventDefault();
 			$("#login-div").hide();
@@ -363,7 +381,48 @@ $(document).ready(function () {
 	        }
     }
 
-	/********************************************************************************
+    function chatApp(database){
+    	var chatTextInput; 
+    	var nameInput;
+
+
+
+    	$("#sendChat").on("click", function(){
+		chatTextInput = $("#chatText").val().trim();
+    	nameInput = $("#chatName").val().trim();
+			database.ref("/chat-data").push({
+				name: nameInput,
+				chatText: chatTextInput
+			});
+		
+    	})
+    	$("#clrChat").on("click", function(){
+    		console.log("clicked");
+    		database.ref("/chat-data").set({
+
+    		});
+		$("#listMessages").empty();
+    	})
+	}
+
+    function listChat(database, chatText, name){
+		database.ref("/chat-data").on("child_added", function(snapshot) {
+
+
+					var chatRow = "<tr><td class='chatNameDisplay'>" +
+						snapshot.val().name + "</td><td>-- </td><td class='chatTextDisplay'>"			
+						+
+						snapshot.val().chatText + "</td>"
+
+					$("#listMessages").append(chatRow);		
+
+				}, function(errorObject) {
+					console.log("The read failed: " + errorObject.code);
+				});
+    }
+
+
+    /********************************************************************************
 	****************************** Function Calls ***********************************
 	********************************************************************************/
 
