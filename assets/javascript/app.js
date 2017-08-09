@@ -27,13 +27,17 @@ $(document).ready(function()
 			var zipcode;
 			//array of event locations
 			var locations = [];
+			//array of food locations
+			var foodLocations = [];
 			//Number of returned events
-			var numOfLocations = 25;
+			var numOfMeetups = 20;
+			//number of returned food places
+			var numOfFood = 20;
 			//Initial Lat
-			var _lat;
+			var lat;
 			//Initial Long
-			var _lng;
-
+			var lng;
+			//firebase configuration
 			config = 
 			{
 				apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
@@ -53,28 +57,29 @@ $(document).ready(function()
 		// on clicking confirm button on main screen
 		$("#confirmZip").click(function(event)
 		{
-
+			//prevent page refresh
 			event.preventDefault();
 
-			if($("#zip-input").val() == "" || $("#zip-input").val().length < 5) {
+
+			//Error check the zip input to make sure the zipcode is valid length
+			if($("#zip-input").val() == "" || $("#zip-input").val().length != 5) {
 				$("#zipError").empty();
 				$("#zipError").append("<div class='alert alert-danger text-center'><strong>Please enter a 5 digit zipcode.</strong></div>");
 				console.log($("#zip-input").val().length);
 			}
+			//If zipcode is 5 digits long then proceed...
 			else {
-				console.log($("#zip-input").val().length);
+
 				$("#start").hide();
 				$("#directory").show();
 				$("#zipError").empty();
-				
-				
-				console.log("Clicked confirmZip")
 
+				//ajax call to the google maps api
 				var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
 				var queryUrl;
 
+				//value taken from user input
 				zipcode = $("#zip-input").val();
-
 				queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=" + apiKey;
 
 				$.ajax(
@@ -83,43 +88,63 @@ $(document).ready(function()
 					method: "GET"
 				}).done(function(response)
 				{
-					console.log(response)
+					console.log(response);
 
-					_lat = response.results[0].geometry.location.lat;
-					_lng = response.results[0].geometry.location.lng;
+					//center the map over the zipcode input
+					lat = response.results[0].geometry.location.lat;
+					lng = response.results[0].geometry.location.lng;
 
-					console.log(_lat);
-					console.log(_lng);
+					console.log(lat);
+					console.log(lng);
 
-					initMap(_lat, _lng);
+					initMap(lat, lng);
 
+				});//end of ajax call
 
+			}//end of else statement
 
-
-				})
-			}
-
-		});
+		});//end of onclick
 		
-
+		//meetup on click runs getevents function and appends the events from the ajax call to the map
 		$("#meetupBtn").on("click", function() {
-			$("#directory").hide();
 
+			$("#directory").hide();
 			$(".loading").show();
-			getEvents(_lat, _lng, zipcode, locations, numOfLocations);
+
+			//call the getEvents function that runs an ajax call to the meetups api
+			getEvents(lat, lng, zipcode, locations, numOfMeetups);
 		});
 
-	}
+		//food on click runs getfood function and appends the events from the ajax call to the map
+		$("#foodBtn").on("click", function() {
 
-	function getEvents(_lat, _lng, zip, locations, numOfLocations) {
+			$("#directory").hide();
+			$(".loading").show();
+
+			//call the getFood function that runs an ajax call to the local google api
+			getFood(zipcode, lat, lng, foodLocations, numOfFood);
+		});
+
+	} //end of main
+
+
+
+/********************************************************************************
+****************************** Button Functions *********************************
+********************************************************************************/
+	function getEvents(lat, lng, zip, locations, numOfMeetups) {
+
 		//Jake API Key
 		var key = "4f561e404155b324d1b791c124f6221";
 
 		//Corey API Key
-	/*	var key = "7e44766f4e7d46533d222a4d7f477b";*/
-		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip + "&only=name,lon,lat";
+	    //var key = "7e44766f4e7d46533d222a4d7f477b";
 
-		$.ajax(
+		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip/* + "&only=zip,name,lon,lat,link,description&*/+"&callback=?";
+
+
+		//ajax call to the meetups api to grab local events
+		$.getJSON(
 		{
 			url: queryUrl,
 			method: "GET"
@@ -128,41 +153,85 @@ $(document).ready(function()
 			console.log(response);
 			
 
-			//loop through the response and retrieve the latitudes and longitudes for the meetups
-			for(var i = 0; i < numOfLocations; i++) {
-				locations[i] = { name: response[i].name, lat: response[i].lat, lon: response[i].lon };
+			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
+			for(var i = 0; i < numOfMeetups; i++) {
+				locations[i] = { name: response.data[i].name, lat: response.data[i].lat, lon: response.data[i].lon, link: response.data[i].link,  description: response.data[i].description};
 			}
 
 			console.log(locations);
-			
 			$(".loading").hide();
 			$("#directory").show();
-			initEvents(_lat, _lng, locations, numOfLocations);
 
+			//initialize the map with the results from the ajax call 
+			initEvents(lat, lng, locations, numOfMeetups);
 
+		});
+	}
 
+	function getFood(zip, lat, lng, foodLocations, numOfFood) {
+
+		//Jake API Key
+		var key = "AIzaSyDt-FgJ-CQjtvVVNO5lAC04H21BH4MPSTs";
+
+		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key;
+
+		$.ajax(
+		{
+			url: queryUrl,
+			method: "GET"
+		}).done(function(response)
+		{
+			console.log(response);
+
+			
+			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
+			for(var i = 0; i < numOfFood; i++) {
+	
+				foodLocations[i] = { name: response.results[i].name, lat: response.results[i].geometry.location.lat, lon: response.results[i].geometry.location.lng,  open: response.results[i].opening_hours.open_now, photos: response.results[i].photos[0].html_attributions[0]};
+
+				if(foodLocations[i].open == true) {
+					foodLocations[i].open = "Yes";
+				}
+				else {
+					foodLocations[i].open = "No";
+				}
+			}
+			console.log(foodLocations);
+			$(".loading").hide();
+			$("#directory").show();
+
+			//initialize the map with the results from the ajax call
+			initFood(lat, lng, foodLocations, numOfFood);
 
 		});
 
 
 	}
 
-	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>')
+
+	/********************************************************************************
+	****************************** Map Functions ************************************
+	********************************************************************************/
+
+	//Append the body with a script tag essential for the google maps api
+	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>');
+
 	var map;
 
-	window.initMap = function(_lat, _lng) {
+	//initializes map and location based off of the zipcode input
+	window.initMap = function(lat, lng) {
 		map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 12,
-			center: new google.maps.LatLng(_lat, _lng),
+			center: new google.maps.LatLng(lat, lng),
 			mapTypeId: 'roadmap'
 
 		});
 	}
 
-	window.initEvents = function(_lat, _lng, locations, numOfLocations) {
+	window.initEvents = function(lat, lng, locations, numOfMeetups) {
 		map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 10,
-			center: new google.maps.LatLng(_lat, _lng),
+			center: new google.maps.LatLng(lat, lng),
 			mapTypeId: 'roadmap'
 
 		});
@@ -182,35 +251,136 @@ $(document).ready(function()
 
 		var features = [];
 
-		for(var i = 0; i < numOfLocations; i++) {
+		for(var i = 0; i < numOfMeetups; i++) {
+
 
 			features[i] = {
 			position: new google.maps.LatLng(locations[i].lat, locations[i].lon),
 			type: 'info',
-			name: locations[i].name
+			name: locations[i].name,
+			contentString: "<div id='content'>" +
+						   "<div id='siteNotice'>" + 
+						   "<h5 id='firstHeading' class='firstHeading'>" + String(locations[i].name) + "</h5>" +
+						   "<div id='bodyContent'>" + 
+						   "<p>" + String(locations[i].description) + "</p>" +
+						   "Link: <a href='" + String(locations[i].link) + "'>" + String(locations[i].link) + "</a>" + 
+						   "</div>" + 
+						   "</div>"
 			};
+
 		}
 
-		// Create markers.
+				// Create markers.
 		features.forEach(function(feature) {
+
+
+			var InfoWindow = new google.maps.InfoWindow({
+				content: feature.contentString
+			});
+
+
 			var marker = new google.maps.Marker({
 				position: feature.position,
 				icon: icons[feature.type].icon,
 				map: map
 			});
+			marker.addListener('click', function() {
+				InfoWindow.open(map, marker);
+			})
+
+		
 		});
+
+
+
 		
 	}
 
+	window.initFood = function(lat, lng, locations, numOfFood) {
+
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 10,
+				center: new google.maps.LatLng(lat, lng),
+				mapTypeId: 'roadmap'
+
+			});
+
+			var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+			var icons = {
+				parking: {
+					icon: iconBase + 'parking_lot_maps.png'
+				},
+				library: {
+					icon: iconBase + 'library_maps.png'
+				},
+				info: {
+					icon: iconBase + 'info-i_maps.png'
+				}
+			};
+
+			var features = [];
+
+			for(var i = 0; i < numOfFood; i++) {
+
+
+				features[i] = {
+				position: new google.maps.LatLng(locations[i].lat, locations[i].lon),
+				type: 'info',
+				name: locations[i].name,
+				contentString: "<div id='content'>" +
+							   "<div id='siteNotice'>" + 
+							   "<h5 id='firstHeading' class='firstHeading'>" + String(locations[i].name) + "</h5>" +
+							   "<div id='bodyContent'>" +
+							   "<p>Open: " + String(locations[i].open) + "</p>" +
+							   /*"<div>Photos By: " + String(locations[i].photos) + "</div>" + */
+							   "</div>" +
+							   "</div>"
+				};
+
+		}
+
+		// Create markers.
+		features.forEach(function(feature) {
+
+
+			var InfoWindow = new google.maps.InfoWindow({
+				content: feature.contentString
+			});
+
+
+			var marker = new google.maps.Marker({
+				position: feature.position,
+				icon: icons[feature.type].icon,
+				map: map
+			});
+			marker.addListener('click', function() {
+				InfoWindow.open(map, marker);
+			})
+
+		
+		});
+
+
+
+		
+	}
+
+
+
+	/********************************************************************************
+	****************************** Function Calls ***********************************
+	********************************************************************************/
+
 	MainProgram();
+
 	$(document).ajaxError(function(){
-    $(".loading").hide()
-    $("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
-    setTimeout(loadError, 2000)
-    function loadError(){
-    	window.location.reload();
-    }
+	    $(".loading").hide()
+	    $("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
+	    setTimeout(loadError, 2000)
+	    function loadError(){
+	    	window.location.reload();
+	    }
+	});	
+
 });
 
-	
-});
