@@ -209,26 +209,3 @@ html, body {
 	background-color: grey;
 	margin-top: 30px;
 }
-#chatDiv{
-	
-}
-#listMessages{
-    z-index: 99;
-    position: absolute;
-    box-shadow: 2px 1px 4px black;
-    height: 175px;
-    overflow: scroll;
-}
-#newMessage{
-	z-index: 99;
-    position: absolute;
-    margin-top: 180px;
-    box-shadow: 2px 2px 3px black;
-}
-.chatNameDisplay{
-	font-weight: bold;
-
-}
-.chatTextDisplay{
-
-}
