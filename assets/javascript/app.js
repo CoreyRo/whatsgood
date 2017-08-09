@@ -28,9 +28,7 @@ $(document).ready(function () {
 		//array of food locations
 		var foodLocations = [];
 		//Number of returned events
-		var numOfMeetups = 20;
-		//number of returned food places
-		var numOfFood = 20;
+		var numOfMeetups = 50;
 		//Initial Lat
 		var lat;
 		//Initial Long
@@ -125,7 +123,7 @@ $(document).ready(function () {
 			// $(".loading").show();
 
 			//call the getFood function that runs an ajax call to the local google api
-			initFood(lat, lng, zipcode, locations, numOfMeetups);
+			initFood(lat, lng, zipcode, locations);
 		});
 
 	
@@ -250,16 +248,16 @@ $(document).ready(function () {
 
 		});
 
-		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+		var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
 		var icons = {
 			parking: {
-				icon: iconBase + 'parking_lot_maps.png'
+				icon: iconBase + 'M.png'
 			},
 			library: {
-				icon: iconBase + 'library_maps.png'
+				icon: iconBase + 'M.png'
 			},
 			info: {
-				icon: iconBase + 'info-i_maps.png'
+				icon: iconBase + 'M.png'
 			}
 		};
 
@@ -309,7 +307,7 @@ $(document).ready(function () {
 		
 	}
 
-	window.initFood = function(lat, lng, zipcode, locations, numOfMeetups) {
+	window.initFood = function(lat, lng, zipcode, locations) {
 
 		// setTimeout(foodTime,2000)
 		// function foodTime(){
@@ -327,19 +325,20 @@ $(document).ready(function () {
 
 	            map = new google.maps.Map(document.getElementById('map'), {
 	                center: pyrmont,
-	                zoom: 15
+	                zoom: 12
 	            });
 
 	            infowindow = new google.maps.InfoWindow();
 	            var service = new google.maps.places.PlacesService(map);
 	            service.nearbySearch({
 	                location: pyrmont,
-	                radius: 500,
-	                type: ['store']
+	                radius: 8100, //about 5 miles
+	                type: ['food']
 	            }, callback);
 	        }
 	        var foodLoc = [];
 	        function callback(results, status) {
+	        	console.log(results);
 	            if (status === google.maps.places.PlacesServiceStatus.OK) {
 	                for (var i = 0; i < results.length; i++) {
 	                    createMarker(results[i]);
@@ -347,6 +346,7 @@ $(document).ready(function () {
 	                }
 	            }
 	        }
+
 	        console.log(foodLoc);
 	        function createMarker(place) {
 	            var placeLoc = place.geometry.location;
