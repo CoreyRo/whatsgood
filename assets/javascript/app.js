@@ -190,7 +190,7 @@ $(document).ready(function () {
 		//Jake API Key
 		var key = "AIzaSyDt-FgJ-CQjtvVVNO5lAC04H21BH4MPSTs";
 
-		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key +"&callback=?";
+		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key;
 
 		//ajax call to the meetups api to grab local events
 		$.getJSON(
@@ -298,6 +298,7 @@ $(document).ready(function () {
 				icon: icons[feature.type].icon,
 				map: map
 			});
+
 			marker.addListener('click', function() {
 				InfoWindow.open(map, marker);
 			})
@@ -366,7 +367,7 @@ $(document).ready(function () {
 	    $("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
 	    setTimeout(loadError, 2000)
 	    function loadError(){
-	    	window.location.reload();
+	    	/*window.location.reload();*/
 	    }
 	});	
 
