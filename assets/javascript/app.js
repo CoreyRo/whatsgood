@@ -1,5 +1,4 @@
-$(document).ready(function()
-{
+$(document).ready(function () {
 	// hide directory screen
 	$("#directory").hide()
 	$("#login-div").hide()
@@ -7,52 +6,51 @@ $(document).ready(function()
 	$(".loading").hide();
 
 	//for the animate.css library
-    $.fn.extend({
-        animateCss: function(animationName) {
-            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-            this.addClass('animated ' + animationName).one(animationEnd, function() {
-                $(this).removeClass('animated ' + animationName);
-            });
-            return this;
-        }
-    });
+	$.fn.extend({
+		animateCss: function (animationName) {
+			var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+			this.addClass('animated ' + animationName).one(animationEnd, function () {
+				$(this).removeClass('animated ' + animationName);
+			});
+			return this;
+		}
+	});
 	// main function for running app
-	function MainProgram()
-	{	
+	function MainProgram() {
 		// Initialize Firebase
-			var config = {};
-			// Variable to reference the database
-			var database;		
-			// variable for storing zipcode
-			var zipcode;
-			//array of event locations
-			var locations = [];
-			//array of food locations
-			var foodLocations = [];
-			//Number of returned events
-			var numOfMeetups = 20;
-			//number of returned food places
-			var numOfFood = 20;
-			//Initial Lat
-			var lat;
-			//Initial Long
-			var lng;
-			//firebase configuration
-			config = 
-			{
-				apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
-			    authDomain: "whatsgood-f9823.firebaseapp.com",
-			    databaseURL: "https://whatsgood-f9823.firebaseio.com",
-			    projectId: "whatsgood-f9823",
-			    storageBucket: "whatsgood-f9823.appspot.com",
-			    messagingSenderId: "905439758172"
-			};
+		var config = {};
+		// Variable to reference the database
+		var database;		
+		// variable for storing zipcode
+		var zipcode;
+		//array of event locations
+		var locations = [];
+		//array of food locations
+		var foodLocations = [];
+		//Number of returned events
+		var numOfMeetups = 20;
+		//number of returned food places
+		var numOfFood = 20;
+		//Initial Lat
+		var lat;
+		//Initial Long
+		var lng;
+		//firebase configuration
+		config = 
+		{
+			apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
+		    authDomain: "whatsgood-f9823.firebaseapp.com",
+		    databaseURL: "https://whatsgood-f9823.firebaseio.com",
+		    projectId: "whatsgood-f9823",
+		    storageBucket: "whatsgood-f9823.appspot.com",
+		    messagingSenderId: "905439758172"
+		};
 
-			firebase.initializeApp(config);
 
-			database = firebase.database();
+		firebase.initializeApp(config);
+
+		database = firebase.database();
 		// end firebase initializing
-
 
 		// on clicking confirm button on main screen
 		$("#confirmZip").click(function(event)
@@ -70,10 +68,13 @@ $(document).ready(function()
 			//If zipcode is 5 digits long then proceed...
 			else {
 
-				$("#start").hide();
+				console.log($("#zip-input").val().length);
+				$("#brand-row").hide();
+				$("#login-register").hide();
+				$("#register-div").hide();
+				$("#login-div").hide();
 				$("#directory").show();
 				$("#zipError").empty();
-
 				//ajax call to the google maps api
 				var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
 				var queryUrl;
@@ -82,13 +83,13 @@ $(document).ready(function()
 				zipcode = $("#zip-input").val();
 				queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=" + apiKey;
 
-				$.ajax(
-				{
+				$.ajax({
 					url: queryUrl,
 					method: "GET"
 				}).done(function(response)
 				{
 					console.log(response);
+
 
 					//center the map over the zipcode input
 					lat = response.results[0].geometry.location.lat;
@@ -98,6 +99,7 @@ $(document).ready(function()
 					console.log(lng);
 
 					initMap(lat, lng);
+					$("#zip-input-row").appendTo("#new-zip-input");
 
 				});//end of ajax call
 
@@ -115,6 +117,7 @@ $(document).ready(function()
 			getEvents(lat, lng, zipcode, locations, numOfMeetups);
 		});
 
+
 		//food on click runs getfood function and appends the events from the ajax call to the map
 		$("#foodBtn").on("click", function() {
 
@@ -125,21 +128,34 @@ $(document).ready(function()
 			getFood(zipcode, lat, lng, foodLocations, numOfFood);
 		});
 
-	} //end of main
+	
+		$("#newReg").on("click", function () {
+			event.preventDefault();
+			$("#login-div").hide();
+			$("#register-div").show().animateCss("slideInUp");
+		})
 
+
+		$("#logBtn").on("click", function () {
+			event.preventDefault();
+			$("#register-div").hide();
+			$("#login-div").show().animateCss("slideInUp");
+		})
+
+	} //end of main
 
 
 /********************************************************************************
 ****************************** Button Functions *********************************
 ********************************************************************************/
+
 	function getEvents(lat, lng, zip, locations, numOfMeetups) {
+
 
 		//Jake API Key
 		var key = "4f561e404155b324d1b791c124f6221";
-
 		//Corey API Key
 	    //var key = "7e44766f4e7d46533d222a4d7f477b";
-
 		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip/* + "&only=zip,name,lon,lat,link,description&*/+"&callback=?";
 
 
@@ -155,6 +171,7 @@ $(document).ready(function()
 
 			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
 			for(var i = 0; i < numOfMeetups; i++) {
+
 				locations[i] = { name: response.data[i].name, lat: response.data[i].lat, lon: response.data[i].lon, link: response.data[i].link,  description: response.data[i].description};
 			}
 
@@ -173,17 +190,17 @@ $(document).ready(function()
 		//Jake API Key
 		var key = "AIzaSyDt-FgJ-CQjtvVVNO5lAC04H21BH4MPSTs";
 
-		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key;
+		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key +"&callback=?";
 
-		$.ajax(
+		//ajax call to the meetups api to grab local events
+		$.getJSON(
 		{
 			url: queryUrl,
 			method: "GET"
 		}).done(function(response)
 		{
 			console.log(response);
-
-			
+	
 			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
 			for(var i = 0; i < numOfFood; i++) {
 	
@@ -202,10 +219,7 @@ $(document).ready(function()
 
 			//initialize the map with the results from the ajax call
 			initFood(lat, lng, foodLocations, numOfFood);
-
 		});
-
-
 	}
 
 
@@ -270,8 +284,8 @@ $(document).ready(function()
 
 		}
 
-				// Create markers.
-		features.forEach(function(feature) {
+			// Create markers.
+			features.forEach(function(feature) {
 
 
 			var InfoWindow = new google.maps.InfoWindow({
@@ -290,8 +304,6 @@ $(document).ready(function()
 
 		
 		});
-
-
 
 		
 	}
@@ -318,29 +330,8 @@ $(document).ready(function()
 				}
 			};
 
-			var features = [];
-
-			for(var i = 0; i < numOfFood; i++) {
-
-
-				features[i] = {
-				position: new google.maps.LatLng(locations[i].lat, locations[i].lon),
-				type: 'info',
-				name: locations[i].name,
-				contentString: "<div id='content'>" +
-							   "<div id='siteNotice'>" + 
-							   "<h5 id='firstHeading' class='firstHeading'>" + String(locations[i].name) + "</h5>" +
-							   "<div id='bodyContent'>" +
-							   "<p>Open: " + String(locations[i].open) + "</p>" +
-							   /*"<div>Photos By: " + String(locations[i].photos) + "</div>" + */
-							   "</div>" +
-							   "</div>"
-				};
-
-		}
-
-		// Create markers.
-		features.forEach(function(feature) {
+			// Create markers.
+			features.forEach(function(feature) {
 
 
 			var InfoWindow = new google.maps.InfoWindow({
@@ -359,9 +350,6 @@ $(document).ready(function()
 
 		
 		});
-
-
-
 		
 	}
 
@@ -383,4 +371,5 @@ $(document).ready(function()
 	});	
 
 });
+
 
