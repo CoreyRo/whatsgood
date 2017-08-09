@@ -20,26 +20,32 @@ $(document).ready(function () {
 		// Initialize Firebase
 		var config = {};
 		// Variable to reference the database
-		var database;
+		var database;		
 		// variable for storing zipcode
 		var zipcode;
 		//array of event locations
 		var locations = [];
-		//Number of returned 
-		var numOfLocations = 25;
+		//array of food locations
+		var foodLocations = [];
+		//Number of returned events
+		var numOfMeetups = 20;
+		//number of returned food places
+		var numOfFood = 20;
 		//Initial Lat
-		var _lat;
+		var lat;
 		//Initial Long
-		var _lng;
-
-		config = {
+		var lng;
+		//firebase configuration
+		config = 
+		{
 			apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
-			authDomain: "whatsgood-f9823.firebaseapp.com",
-			databaseURL: "https://whatsgood-f9823.firebaseio.com",
-			projectId: "whatsgood-f9823",
-			storageBucket: "whatsgood-f9823.appspot.com",
-			messagingSenderId: "905439758172"
+		    authDomain: "whatsgood-f9823.firebaseapp.com",
+		    databaseURL: "https://whatsgood-f9823.firebaseio.com",
+		    projectId: "whatsgood-f9823",
+		    storageBucket: "whatsgood-f9823.appspot.com",
+		    messagingSenderId: "905439758172"
 		};
+
 
 		firebase.initializeApp(config);
 
@@ -47,15 +53,21 @@ $(document).ready(function () {
 		// end firebase initializing
 
 		// on clicking confirm button on main screen
-		$("#confirmZip").click(function (event) {
-
+		$("#confirmZip").click(function(event)
+		{
+			//prevent page refresh
 			event.preventDefault();
 
-			if ($("#zip-input").val() == "" || $("#zip-input").val().length < 5) {
+
+			//Error check the zip input to make sure the zipcode is valid length
+			if($("#zip-input").val() == "" || $("#zip-input").val().length != 5) {
 				$("#zipError").empty();
 				$("#zipError").append("<div class='alert alert-danger text-center'><strong>Please enter a 5 digit zipcode.</strong></div>");
 				console.log($("#zip-input").val().length);
-			} else {
+			}
+			//If zipcode is 5 digits long then proceed...
+			else {
+
 				console.log($("#zip-input").val().length);
 				$("#brand-row").hide();
 				$("#login-register").hide();
@@ -63,40 +75,66 @@ $(document).ready(function () {
 				$("#login-div").hide();
 				$("#directory").show();
 				$("#zipError").empty();
-
-				console.log("Clicked confirmZip")
-
+				//ajax call to the google maps api
 				var apiKey = "AIzaSyAVeD_VRihMVTcxvIM6mwH6WSEZ-s1kqRo";
 				var queryUrl;
 
+				//value taken from user input
 				zipcode = $("#zip-input").val();
-
 				queryUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + zipcode + "&key=" + apiKey;
 
 				$.ajax({
 					url: queryUrl,
 					method: "GET"
-				}).done(function (response) {
-					console.log(response)
+				}).done(function(response)
+				{
+					console.log(response);
 
-					_lat = response.results[0].geometry.location.lat;
-					_lng = response.results[0].geometry.location.lng;
 
-					console.log(_lat);
-					console.log(_lng);
+					//center the map over the zipcode input
+					lat = response.results[0].geometry.location.lat;
+					lng = response.results[0].geometry.location.lng;
 
-					initMap(_lat, _lng);
+					console.log(lat);
+					console.log(lng);
+
+					initMap(lat, lng);
 					$("#zip-input-row").appendTo("#new-zip-input");
 
-				})
-			}
+				});//end of ajax call
 
+			}//end of else statement
+
+		});//end of onclick
+		
+		//meetup on click runs getevents function and appends the events from the ajax call to the map
+		$("#meetupBtn").on("click", function() {
+
+			$("#directory").hide();
+			$(".loading").show();
+
+			//call the getEvents function that runs an ajax call to the meetups api
+			getEvents(lat, lng, zipcode, locations, numOfMeetups);
 		});
+
+
+		//food on click runs getfood function and appends the events from the ajax call to the map
+		$("#foodBtn").on("click", function() {
+
+			$("#directory").hide();
+			$(".loading").show();
+
+			//call the getFood function that runs an ajax call to the local google api
+			getFood(zipcode, lat, lng, foodLocations, numOfFood);
+		});
+
+	
 		$("#newReg").on("click", function () {
 			event.preventDefault();
 			$("#login-div").hide();
 			$("#register-div").show().animateCss("slideInUp");
 		})
+
 
 		$("#logBtn").on("click", function () {
 			event.preventDefault();
@@ -104,32 +142,25 @@ $(document).ready(function () {
 			$("#login-div").show().animateCss("slideInUp");
 		})
 
-		$("#meetupBtn").on("click", function () {
-			$("#directory").hide();
+	} //end of main
 
-			$(".loading").show();
-			getEvents(_lat, _lng, zipcode, locations, numOfLocations);
-		});
 
-	}
-
-	/********************************************************************************
+/********************************************************************************
 ****************************** Button Functions *********************************
 ********************************************************************************/
 
 	function getEvents(lat, lng, zip, locations, numOfMeetups) {
 
+
 		//Jake API Key
 		var key = "4f561e404155b324d1b791c124f6221";
-
 		//Corey API Key
 	    //var key = "7e44766f4e7d46533d222a4d7f477b";
-
-		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip + "&only=zip,name,lon,lat,link,description";
+		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip/* + "&only=zip,name,lon,lat,link,description&*/+"&callback=?";
 
 
 		//ajax call to the meetups api to grab local events
-		$.ajax(
+		$.getJSON(
 		{
 			url: queryUrl,
 			method: "GET"
@@ -140,7 +171,8 @@ $(document).ready(function () {
 
 			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
 			for(var i = 0; i < numOfMeetups; i++) {
-				locations[i] = { name: response[i].name, lat: response[i].lat, lon: response[i].lon, link: response[i].link,  description: response[i].description};
+
+				locations[i] = { name: response.data[i].name, lat: response.data[i].lat, lon: response.data[i].lon, link: response.data[i].link,  description: response.data[i].description};
 			}
 
 			console.log(locations);
@@ -158,17 +190,17 @@ $(document).ready(function () {
 		//Jake API Key
 		var key = "AIzaSyDt-FgJ-CQjtvVVNO5lAC04H21BH4MPSTs";
 
-		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key;
+		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key +"&callback=?";
 
-		$.ajax(
+		//ajax call to the meetups api to grab local events
+		$.getJSON(
 		{
 			url: queryUrl,
 			method: "GET"
 		}).done(function(response)
 		{
 			console.log(response);
-
-			
+	
 			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
 			for(var i = 0; i < numOfFood; i++) {
 	
@@ -187,10 +219,7 @@ $(document).ready(function () {
 
 			//initialize the map with the results from the ajax call
 			initFood(lat, lng, foodLocations, numOfFood);
-
 		});
-
-
 	}
 
 
@@ -255,8 +284,8 @@ $(document).ready(function () {
 
 		}
 
-				// Create markers.
-		features.forEach(function(feature) {
+			// Create markers.
+			features.forEach(function(feature) {
 
 
 			var InfoWindow = new google.maps.InfoWindow({
@@ -269,14 +298,13 @@ $(document).ready(function () {
 				icon: icons[feature.type].icon,
 				map: map
 			});
+			
 			marker.addListener('click', function() {
 				InfoWindow.open(map, marker);
 			})
 
 		
 		});
-
-
 
 		
 	}
@@ -303,29 +331,8 @@ $(document).ready(function () {
 				}
 			};
 
-			var features = [];
-
-			for(var i = 0; i < numOfFood; i++) {
-
-
-				features[i] = {
-				position: new google.maps.LatLng(locations[i].lat, locations[i].lon),
-				type: 'info',
-				name: locations[i].name,
-				contentString: "<div id='content'>" +
-							   "<div id='siteNotice'>" + 
-							   "<h5 id='firstHeading' class='firstHeading'>" + String(locations[i].name) + "</h5>" +
-							   "<div id='bodyContent'>" +
-							   "<p>Open: " + String(locations[i].open) + "</p>" +
-							   /*"<div>" + String(locations[i].photos) + "</div>" + */
-							   "</div>" +
-							   "</div>"
-				};
-
-		}
-
-		// Create markers.
-		features.forEach(function(feature) {
+			// Create markers.
+			features.forEach(function(feature) {
 
 
 			var InfoWindow = new google.maps.InfoWindow({
@@ -344,9 +351,6 @@ $(document).ready(function () {
 
 		
 		});
-
-
-
 		
 	}
 
@@ -368,3 +372,5 @@ $(document).ready(function () {
 	});	
 
 });
+
+
