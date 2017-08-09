@@ -28,7 +28,9 @@ $(document).ready(function () {
 		//array of food locations
 		var foodLocations = [];
 		//Number of returned events
-		var numOfMeetups = 50;
+		var numOfMeetups = 20;
+		//number of returned food places
+		var numOfFood = 20;
 		//Initial Lat
 		var lat;
 		//Initial Long
@@ -119,11 +121,11 @@ $(document).ready(function () {
 		//food on click runs getfood function and appends the events from the ajax call to the map
 		$("#foodBtn").on("click", function() {
 
-			// $("#directory").hide();
-			// $(".loading").show();
+			$("#directory").hide();
+			$(".loading").show();
 
 			//call the getFood function that runs an ajax call to the local google api
-			initFood(lat, lng, zipcode, locations);
+			getFood(zipcode, lat, lng, foodLocations, numOfFood);
 		});
 		$("#chatBtn").on("click", function(){
 			console.log("clicked");
@@ -201,42 +203,42 @@ $(document).ready(function () {
 		});
 	}
 
-	// function getFood(zip, lat, lng, foodLocations, numOfFood) {
+	function getFood(zip, lat, lng, foodLocations, numOfFood) {
 
-	// 	//Jake API Key
-	// 	var key = "AIzaSyDSp7Qb4NI4VBu8GHbovohjdNWYaghYBpI";
+		//Jake API Key
+		var key = "AIzaSyDt-FgJ-CQjtvVVNO5lAC04H21BH4MPSTs";
 
-	// 	var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key +"&callback=?";
+		var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key +"&callback=?";
 
-	// 	//ajax call to the meetups api to grab local events
-	// 	$.getJSON(
-	// 	{
-	// 		url: queryUrl,
-	// 		method: "GET"
-	// 	}).done(function(response)
-	// 	{
-	// 		console.log(response);
+		//ajax call to the meetups api to grab local events
+		$.getJSON(
+		{
+			url: queryUrl,
+			method: "GET"
+		}).done(function(response)
+		{
+			console.log(response);
 	
-	// 		//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
-	// 		for(var i = 0; i < numOfFood; i++) {
+			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
+			for(var i = 0; i < numOfFood; i++) {
 	
-	// 			foodLocations[i] = { name: response.results[i].name, lat: response.results[i].geometry.location.lat, lon: response.results[i].geometry.location.lng,  open: response.results[i].opening_hours.open_now, photos: response.results[i].photos[0].html_attributions[0]};
+				foodLocations[i] = { name: response.results[i].name, lat: response.results[i].geometry.location.lat, lon: response.results[i].geometry.location.lng,  open: response.results[i].opening_hours.open_now, photos: response.results[i].photos[0].html_attributions[0]};
 
-	// 			if(foodLocations[i].open == true) {
-	// 				foodLocations[i].open = "Yes";
-	// 			}
-	// 			else {
-	// 				foodLocations[i].open = "No";
-	// 			}
-	// 		}
-	// 		console.log(foodLocations);
-	// 		$(".loading").hide();
-	// 		$("#directory").show();
+				if(foodLocations[i].open == true) {
+					foodLocations[i].open = "Yes";
+				}
+				else {
+					foodLocations[i].open = "No";
+				}
+			}
+			console.log(foodLocations);
+			$(".loading").hide();
+			$("#directory").show();
 
-	// 		//initialize the map with the results from the ajax call
-	// 		initFood(lat, lng, foodLocations, numOfFood);
-	// 	});
-	// }
+			//initialize the map with the results from the ajax call
+			initFood(lat, lng, foodLocations, numOfFood);
+		});
+	}
 
 
 	/********************************************************************************
@@ -244,7 +246,7 @@ $(document).ready(function () {
 	********************************************************************************/
 
 	//Append the body with a script tag essential for the google maps api
-	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&libraries=places&callback=initMap"></script>');
+	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&callback=initMap"></script>');
 
 	var map;
 
@@ -266,16 +268,16 @@ $(document).ready(function () {
 
 		});
 
-		var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
+		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
 		var icons = {
 			parking: {
-				icon: iconBase + 'M.png'
+				icon: iconBase + 'parking_lot_maps.png'
 			},
 			library: {
-				icon: iconBase + 'M.png'
+				icon: iconBase + 'library_maps.png'
 			},
 			info: {
-				icon: iconBase + 'M.png'
+				icon: iconBase + 'info-i_maps.png'
 			}
 		};
 
@@ -325,61 +327,52 @@ $(document).ready(function () {
 		
 	}
 
-	window.initFood = function(lat, lng, zipcode, locations) {
+	window.initFood = function(lat, lng, locations, numOfFood) {
 
-		// setTimeout(foodTime,2000)
-		// function foodTime(){
-		// 	$(".loading").hide();
-		// 	$("#directory").show();
-		// }
-			console.log("clicked");
-	        var map;
-	        var infowindow;
-	        initMap(lat, lng);
-	        function initMap(lat, lng) {
-	        	console.log(lat + "," + lng)
-	            var pyrmont = {lat,
-	            	lng};
+			map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 10,
+				center: new google.maps.LatLng(lat, lng),
+				mapTypeId: 'roadmap'
 
-	            map = new google.maps.Map(document.getElementById('map'), {
-	                center: pyrmont,
-	                zoom: 12
-	            });
+			});
 
-	            infowindow = new google.maps.InfoWindow();
-	            var service = new google.maps.places.PlacesService(map);
-	            service.nearbySearch({
-	                location: pyrmont,
-	                radius: 8100, //about 5 miles
-	                type: ['food']
-	            }, callback);
-	        }
-	        var foodLoc = [];
-	        function callback(results, status) {
-	        	console.log(results);
-	            if (status === google.maps.places.PlacesServiceStatus.OK) {
-	                for (var i = 0; i < results.length; i++) {
-	                    createMarker(results[i]);
-	                    foodLoc[i] = results[i];
-	                }
-	            }
-	        }
+			var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+			var icons = {
+				parking: {
+					icon: iconBase + 'parking_lot_maps.png'
+				},
+				library: {
+					icon: iconBase + 'library_maps.png'
+				},
+				info: {
+					icon: iconBase + 'info-i_maps.png'
+				}
+			};
 
-	        console.log(foodLoc);
-	        function createMarker(place) {
-	            var placeLoc = place.geometry.location;
-	            var marker = new google.maps.Marker({
-	                map: map,
+			// Create markers.
+			features.forEach(function(feature) {
 
-	                position: place.geometry.location
-	            });
 
-	            google.maps.event.addListener(marker, 'click', function() {
-	                infowindow.setContent(place.name);
-	                infowindow.open(map, this);
-	            });
-	        }
-    }
+			var InfoWindow = new google.maps.InfoWindow({
+				content: feature.contentString
+			});
+
+
+			var marker = new google.maps.Marker({
+				position: feature.position,
+				icon: icons[feature.type].icon,
+				map: map
+			});
+			marker.addListener('click', function() {
+				InfoWindow.open(map, marker);
+			})
+
+		
+		});
+		
+	}
+
+
 
     function chatApp(database){
     	var chatTextInput; 
@@ -431,10 +424,10 @@ $(document).ready(function () {
 	$(document).ajaxError(function(){
 	    $(".loading").hide()
 	    $("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
-	    // setTimeout(loadError, 2000)
-	    // function loadError(){
-	    // 	window.location.reload();
-	    // }
+	    setTimeout(loadError, 2000)
+	    function loadError(){
+	    	window.location.reload();
+	    }
 	});	
 
 });
