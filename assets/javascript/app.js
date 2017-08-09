@@ -172,8 +172,11 @@ $(document).ready(function () {
 			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
 			for(var i = 0; i < numOfMeetups; i++) {
 
-				locations[i] = { name: response.data[i].name, lat: response.data[i].lat, lon: response.data[i].lon, link: response.data[i].link,  description: response.data[i].description};
+				locations[i] = { name: response.data[i].name, lat: response.data[i].lat, lon: response.data[i].lon, link: response.data[i].link,  
+						description: response.data[i].description, city: response.data[i].city};
 			}
+
+			logResults(locations);
 
 			console.log(locations);
 			$(".loading").hide();
@@ -354,6 +357,19 @@ $(document).ready(function () {
 		
 	}
 
+
+
+	function logResults(_results) {
+		console.log(_results);
+		var _locations = _results;
+		for (var i = 0; i < _locations.length; i++) {
+			console.log(_locations[i])
+			var resultsRow = "<tr><td>" + _locations[i].name + "</td><td>"
+			+ _locations[i].city + "</td><td>"
+			+ _locations[i].description + "</td></tr>";
+		$("#row-results").append(resultsRow);
+		}
+	}
 
 
 	/********************************************************************************
