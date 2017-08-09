@@ -1,14 +1,58 @@
+body{
+	margin:0 0 0 0;
+}
 #navbrand{
 	color:#0cf;
 }
-#brand{
+#brand, #brandH1{
 	color:#0cf;
-	font-size: 48pt;
+	font-size: 62pt;
 	text-align: center;
-	text-shadow: 2px 2px 3px #888;
+	text-shadow: 4px 2px 3px #999;
 	padding-top:25px;
-	padding-bottom: 50px;
+	padding-bottom: 200px;
 
+}
+#loginOrRegister{
+	margin-top: 10px;
+	margin-bottom: 50px;
+	text-align: center;
+}
+.txtBtn{
+	color:#0cf;
+	background:none;
+	border:none;
+	margin:0;
+	padding:0;
+}
+.txtBtn:hover{
+
+	color:#08c;
+}
+#regBox, #logBox{
+	border-radius: 5px;
+	box-shadow: 5px 2px 5px black;
+	background: -webkit-linear-gradient(#ccc,#888); /* Safari 5.1-6.0 */
+    background: -o-linear-gradient(#ccc,#888); /* Opera 11.1-12.0 */ 
+    background: -moz-linear-gradient(#ccc,#888); /* Firefox 3.6-15 */
+    background: linear-gradient(#ccc,#888); /* Standard syntax */
+}
+#confirmAccount, #confirmReg{
+	margin-bottom: 10px;
+	border:none;
+	font-size: 14pt;
+	border-radius: 5px;
+	background: -webkit-linear-gradient(#ccc,#888); /* Safari 5.1-6.0 */
+    background: -o-linear-gradient(#ccc,#888); /* Opera 11.1-12.0 */ 
+    background: -moz-linear-gradient(#ccc,#888); /* Firefox 3.6-15 */
+    background: linear-gradient(#ccc,#888); /* Standard syntax */
+	box-shadow: 2px 2px 2px black;
+}
+#login-div, #register-div{
+	position: relative;
+	bottom:0;
+	margin:0 auto;
+	width:90%;
 }
 #brandImg{
 	margin-bottom: 50px;
@@ -20,7 +64,7 @@
 	margin-bottom: 15px !important;
 }
 #zipInput,
-#account-interface{
+.account-interface{
 	text-align: center;
 	font-size: 18pt;
 
@@ -29,18 +73,20 @@
 	margin-top: 15px;
 	border:none;
 	border-radius: 5px;
-
+	font-size: 14pt;
 	box-shadow: 2px 2px 2px #888;
 }
 
-#confirmZip{
+#confirmZip, #confirmAccount, #confirmReg{
+	color: #fff;
 	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
     background: -moz-linear-gradient(#0af,#08c); /* Firefox 3.6-15 */
     background: linear-gradient(#0af,#08c); /* Standard syntax */
 
 }
-#confirmZip:hover{
+#confirmZip:hover, #confirmAccount:hover, #confirmReg:hover{
+	color:#fff;
 	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
     background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
@@ -82,7 +128,9 @@
 }
 
 .categoryBtns {
+	margin-top: 20px;
 	color: #fff;
+	box-shadow: 3px 3px 5px #888;
 	background: -webkit-linear-gradient(#0cf,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0cf,#08c); /* Opera 11.1-12.0 */ 
     background: -moz-linear-gradient(#0cf,#08c); /* Firefox 3.6-15 */
@@ -99,10 +147,41 @@
     background: linear-gradient(#0cf,#08c); /* Standard syntax */
 }
 
-#map {
-        height: 500px;
-        width:100%;
+#map, #loadImg {
+	border: 2px solid black;
+	overflow: hidden;
+	box-shadow: 4px 4px 6px #888;
+  	height: 600px;
+    width: 100%;
+    margin: 50px 0px 50px 0px;
 }
+#new-zip-input{
+	margin-bottom: 100px;
+}
+
+@media only screen and (max-width: 770px) {
+    #map, #loadImg {
+    	
+        border: 2px solid black;
+		overflow: hidden;
+		box-shadow: 4px 4px 6px #888;
+	  	height: 400px;
+	    width: 80%;
+	    margin: 50px 0px 50px -40px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    #map, #loadImg {
+        border: 2px solid black;
+		overflow: hidden;
+		box-shadow: 4px 4px 6px #888;
+	  	height: 400px;
+	    width: 80%;
+	    margin: 50px 0px 50px -35px;
+    }
+}
+
       /* Optional: Makes the sample page fill the window. */
 html, body {
         height: 100%;
@@ -123,12 +202,10 @@ html, body {
         padding-left: 10px;
 }
 
-#account-interface
-{
+#account-interface{
 	margin-top: 15px;
 }
-#accountBox
-{
+#accountBox{
 	background-color: grey;
 	margin-top: 30px;
 }
