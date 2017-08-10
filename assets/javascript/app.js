@@ -331,6 +331,7 @@ $(document).ready(function () {
 	function logResults(locations) {
 
 		$("#table-head").empty();
+		$("#row-results").empty();
 
 		var headRow = $("<tr>");
 		var nameHead = $("<th>");
@@ -366,6 +367,7 @@ $(document).ready(function () {
 	function logFood(foodLocations) {
 
 		$("#table-head").empty();
+		$("#row-results").empty();
 
 		var headRow = $("<tr>");
 		var nameHead = $("<th>");
