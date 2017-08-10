@@ -10,7 +10,7 @@ body{
 	text-align: center;
 	text-shadow: 4px 2px 3px #999;
 	padding-top:25px;
-	padding-bottom: 150px;
+	padding-bottom: 200px;
 
 }
 #loginOrRegister{
@@ -159,6 +159,18 @@ body{
 	margin-bottom: 100px;
 }
 
+.results .panel {
+	overflow: auto;
+	width: 100%;
+}
+
+
+.results .panel-heading {
+	overflow: auto;
+	width: auto;
+}
+
+
 @media only screen and (max-width: 770px) {
     #map, #loadImg {
     	
@@ -208,4 +220,3 @@ html, body {
 #accountBox{
 	background-color: grey;
 	margin-top: 30px;
-}
