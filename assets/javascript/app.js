@@ -18,13 +18,15 @@ $(document).ready(function () {
 		}
 	});
 	setTimeout(brandAni, 600);
-	function brandAni(){
+
+	function brandAni() {
 		$("#brandH1").show().animateCss("bounceIn");
 		setTimeout(zipAni, 600)
-		function zipAni(){
+
+		function zipAni() {
 			$("#zip-input-row, #login-register").show().animateCss("fadeIn")
 		}
-		
+
 	}
 	// main function for running app
 	function MainProgram() {
@@ -39,7 +41,7 @@ $(document).ready(function () {
 		//array of food locations
 		var foodLocations = [];
 		//Number of returned events
-		var numOfMeetups = 50;
+		var numOfMeetups = 20;
 		//Initial Lat
 		var lat;
 		//Initial Long
@@ -171,7 +173,8 @@ $(document).ready(function () {
 					lat: response.data[i].lat,
 					lon: response.data[i].lon,
 					link: response.data[i].link,
-					description: response.data[i].description
+					description: response.data[i].description,
+					city: response.data[i].city
 				};
 			}
 
@@ -179,15 +182,20 @@ $(document).ready(function () {
 			$(".loading").hide();
 			$("#directory").show();
 
+			logResults(locations);
+
 			//initialize the map with the results from the ajax call 
 			initEvents(lat, lng, locations, numOfMeetups);
 
 		});
 	}
 
+	/********************************************************************************
+	 ****************************** Map Functions ************************************
+	 ********************************************************************************/
+
 	//Append the body with a script tag essential for the google maps api
 	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&libraries=places&callback=initMap"></script>');
-
 	var map;
 
 	//initializes map and location based off of the zipcode input
@@ -262,7 +270,7 @@ $(document).ready(function () {
 
 	}
 
-	window.initFood = function (lat, lng, zipcode, locations) {
+	window.initFood = function (lat, lng, zipcode, foodLocations) {
 
 		// setTimeout(foodTime,2000)
 		// function foodTime(){
@@ -294,19 +302,19 @@ $(document).ready(function () {
 				type: ['food']
 			}, callback);
 		}
-		var foodLoc = [];
 
 		function callback(results, status) {
-			console.log(results);
+			// console.log(results);
 			if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 					createMarker(results[i]);
-					foodLoc[i] = results[i];
+					foodLocations[i] = results[i];
 				}
 			}
-		}
 
-		console.log(foodLoc);
+			logFood(results);
+
+		}
 
 		function createMarker(place) {
 			var placeLoc = place.geometry.location;
@@ -325,6 +333,77 @@ $(document).ready(function () {
 		}
 	}
 
+	function logResults(locations) {
+
+		$("#table-head").empty();
+		$("#row-results").empty();
+
+		var headRow = $("<tr>");
+		var nameHead = $("<th>");
+		var locHead = $("<th>");
+		var descHead = $("<th>");
+
+		nameHead.html("Meetup Title");
+		locHead.html("Location");
+		descHead.html("Description");
+
+		headRow.append(nameHead, locHead, descHead);
+		$("#table-head").append(headRow);
+
+		for (var i = 0; i < locations.length; i++) {
+			console.log(locations[i]);
+			var resultsRow = $("<tr>");
+			var nameCell = $("<td>");
+			var cityCell = $("<td>");
+			var descCell = $("<td>");
+
+			nameCell.html(locations[i].name);
+			cityCell.html(locations[i].city);
+			descCell.html(locations[i].description);
+
+			resultsRow.append(nameCell, cityCell, descCell);
+			$("#row-results").append(resultsRow);
+
+		}
+	}
+
+	function logFood(foodLocations) {
+
+		$("#table-head").empty();
+		$("#row-results").empty();
+
+		var headRow = $("<tr>");
+		var nameHead = $("<th>");
+		var locHead = $("<th>");
+		var ratingHead = $("<th>");
+		var openHead = $("<th>");
+
+		nameHead.html("Name");
+		locHead.html("Location");
+		ratingHead.html("Rating");
+		openHead.html("Open?");
+
+		headRow.append(nameHead, locHead, ratingHead, openHead);
+		$("#table-head").append(headRow);
+
+		for (var i = 0; i < foodLocations.length; i++) {
+			var resultsRow = $("<tr>");
+			var nameCell = $("<td>");
+			var cityCell = $("<td>");
+			var descCell = $("<td>");
+			var openCell = $("<td>");
+
+			nameCell.html(foodLocations[i].name);
+			cityCell.html(foodLocations[i].vicinity);
+			descCell.html(foodLocations[i].rating);
+			openCell.html(foodLocations[i].opening_hours.open_now);
+
+			resultsRow.append(nameCell, cityCell, descCell, openCell);
+			$("#row-results").append(resultsRow);
+
+		}
+	}
+
 	/********************************************************************************
 	 ****************************** Function Calls ***********************************
 	 ********************************************************************************/
@@ -334,9 +413,9 @@ $(document).ready(function () {
 	$(document).ajaxError(function () {
 		$(".loading").hide()
 		$("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
-		setTimeout(loadError, 2000)
-		function loadError(){
-			window.location.reload();
+		 setTimeout(loadError, 2000)
+		 function loadError(){
+		 	window.location.reload();
 		}
 	});
 
