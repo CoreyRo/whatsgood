@@ -1,9 +1,11 @@
 $(document).ready(function () {
 	// hide directory screen
-	$("#directory").hide()
-	$("#login-div").hide()
-	$("#register-div").hide()
+	$("#brandH1").hide();
+	$("#directory").hide();
+	$("#login-div").hide();
+	$("#register-div").hide();
 	$(".loading").hide();
+	$("#zip-input-row, #login-register").hide();
 
 	//for the animate.css library
 	$.fn.extend({
@@ -15,6 +17,15 @@ $(document).ready(function () {
 			return this;
 		}
 	});
+	setTimeout(brandAni, 600);
+	function brandAni(){
+		$("#brandH1").show().animateCss("bounceIn");
+		setTimeout(zipAni, 600)
+		function zipAni(){
+			$("#zip-input-row, #login-register").show().animateCss("fadeIn")
+		}
+		
+	}
 	// main function for running app
 	function MainProgram() {
 		// Initialize Firebase
