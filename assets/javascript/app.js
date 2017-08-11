@@ -500,6 +500,7 @@ $(document).ready(function () {
 	        }
 
 	        function createMarker(place) {
+	            var open = "";
 	            var placeLoc = place.geometry.location;
 	            var marker = new google.maps.Marker({
 	                map: map,
@@ -507,8 +508,23 @@ $(document).ready(function () {
 	                position: place.geometry.location
 	            });
 
+	          	if( typeof place.opening_hours === "undefined") {
+
+				open = "N/A";
+				}
+				else {
+
+					if(place.opening_hours.open_now === true) {
+					open = "Yes";
+					}
+					else {
+					open = "No";
+					}
+
+				}
+
 	            google.maps.event.addListener(marker, 'click', function() {
-	                infowindow.setContent(place.name);
+	                infowindow.setContent("<strong>" + place.name + "</strong><br>Address: " + place.vicinity + "<br>Rating: " + place.rating + "<br>Open: " + open );
 	                infowindow.open(map, this);
 	            });
 	        }
@@ -552,6 +568,11 @@ $(document).ready(function () {
 			descCell.html(locations[index].description);
 
 			resultsRow.append(nameCell, typeCell, cityCell, descCell);
+			
+			resultsRow.find('p').each( function (index, element) {
+			 if ($(element).text().match(/(.)\1{9,}/)) { $(element).text('') }
+			});
+			
 			$("#row-results").append(resultsRow);
 
 		}
@@ -572,7 +593,7 @@ $(document).ready(function () {
 		nameHead.html("Name");
 		locHead.html("Location");
 		ratingHead.html("Rating");
-		openHead.html("Open?");
+		openHead.html("Open");
 
 		headRow.append(nameHead, locHead, ratingHead, openHead);
 		$("#table-head").append(headRow);
@@ -635,6 +656,21 @@ $(document).ready(function () {
 			var nameCell = $("<td>");
 			var cityCell = $("<td>");
 			var descCell = $("<td>");
+			
+			if( typeof locations[i].opening_hours === "undefined") {
+
+				open = "N/A";
+			}
+			else {
+
+				if(locations[i].opening_hours.open_now === true) {
+					open = "Yes";
+				}
+				else {
+					open = "No";
+				}
+
+			}
 
 			nameCell.html(locations[i].name);
 			cityCell.html(locations[i].vicinity);
