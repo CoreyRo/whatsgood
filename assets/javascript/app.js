@@ -546,7 +546,7 @@ $(document).ready(function () {
     }
 
 
-	function logResults(locations, indexAr, numOfMeetups, type) {
+		function logResults(locations, indexAr, numOfMeetups, type) {
 
 
 		$("#table-head").empty();
@@ -561,10 +561,11 @@ $(document).ready(function () {
 		nameHead.html("Meetup Title");
 		typeHead.html("Category");
 		locHead.html("Location");
-		descHead.html("Description");
+		descHead.html("Link");
 
 		headRow.append(nameHead, typeHead, locHead, descHead);
 		$("#table-head").append(headRow);
+			console.log('here')
 
 
 		for (var i = 0; i < numOfMeetups; i++) {
@@ -580,14 +581,14 @@ $(document).ready(function () {
 			nameCell.html(locations[index].name);
 			typeCell.html(type);
 			cityCell.html(locations[index].city);
-			descCell.html(locations[index].description);
+			descCell.html("<a href='" + locations[index].link + "''>" + locations[index].link + "</a>");
 
 			resultsRow.append(nameCell, typeCell, cityCell, descCell);
-			
+
 			resultsRow.find('p').each( function (index, element) {
 			 if ($(element).text().match(/(.)\1{9,}/)) { $(element).text('') }
-			});
-			
+			})
+
 			$("#row-results").append(resultsRow);
 
 		}
