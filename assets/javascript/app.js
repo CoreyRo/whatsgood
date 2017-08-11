@@ -6,6 +6,9 @@ $(document).ready(function () {
 	$("#register-div").hide();
 	$(".loading").hide();
 	$("#zip-input-row, #login-register").hide();
+	$("#zipForm").hide();
+	$("#zipInput").hide();
+	$("#logout").hide();
 
 	//for the animate.css library
 	$.fn.extend({
@@ -53,6 +56,8 @@ $(document).ready(function () {
 
 		var indexAr = [];
 
+		var currentUser;
+
 		config = 
 		{
 			apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
@@ -68,13 +73,11 @@ $(document).ready(function () {
 
 		database = firebase.database();
 		// end firebase initializing
-
 		// on clicking confirm button on main screen
 		$("#confirmZip").click(function(event)
 		{
 			//prevent page refresh
 			event.preventDefault();
-
 
 			//Error check the zip input to make sure the zipcode is valid length
 			if($("#zip-input").val() == "" || $("#zip-input").val().length != 5) {
@@ -120,71 +123,16 @@ $(document).ready(function () {
 
 				});//end of ajax call
 
+				console.log(currentUser)
+	       	    database.ref("profiles/" + currentUser).update(
+                {
+                  zipcode: zipcode
+                });
+   		       
+
 			}//end of else statement
 
 		});//end of onclick
-
-		//Stores the root to the auth section
-        var auth = firebase.auth();
-        //Handles the user logging in
-        $("#confirmAccount").click(function(event)
-        {
-            event.preventDefault();
-            var email = $("#myname-input").val();
-            var pass = $("#mypass-input").val();
-            //Sign in
-            promise = auth.signInWithEmailAndPassword(email, pass);
-            promise.catch(function(e)
-            {
-                alert(e.message);
-            })
-        })
-
-        //registers a new user
-        $("#confirmReg").click(function(event)
-        {
-            event.preventDefault();
-            var email = $("#email-input").val();
-            var pass = $("#pass-input").val();
-            //TODO: validate that both the email and password fields are valid
-            promise = auth.createUserWithEmailAndPassword(email, pass);
-            promise.catch(function(e)
-            {
-                alert(e.message);
-            })
-            promise.then(function(resolve)
-            {
-                database.ref("/profiles").push(
-                {
-                  uid: resolve.uid,
-                  email: resolve.email
-                });
-            })
-
-        })
-        //checks to see if the user is logged in or not
-        auth.onAuthStateChanged(function(firebaseUser)
-        {
-            if(firebaseUser)
-            {
-                $("#logout").show();
-            }
-            else
-            {
-                $("#logout").hide();
-            }
-        });
-        //Logs out the user
-        $("#logout").click(function(e)
-        {
-            firebase.auth().signOut();
-        })
-        //this section will query data stored in a specific user
-        var ref = firebase.database().ref("profiles");
-        ref.orderByChild("profiles").on("child_added", function(snapshot) 
-        {
-          console.log(snapshot.key + " was " + snapshot.val().email + " m tall");
-        });
 
 
         //onClick functions...
@@ -234,6 +182,89 @@ $(document).ready(function () {
 			$("#register-div").hide();
 			$("#login-div").show().animateCss("slideInUp");
 		})
+
+		//Stores the root to the auth section
+        var auth = firebase.auth();
+        var currentUserId = '';
+
+        //Handles the user logging in
+        $("#confirmAccount").click(function(event)
+        {
+            event.preventDefault();
+            $("#zipForm").show();
+			$("#zipInput").show();
+			$("#register-div").hide();
+			$("#login-div").hide();  
+            var email = $("#myname-input").val();
+            var pass = $("#mypass-input").val();
+            //Sign in
+            promise = auth.signInWithEmailAndPassword(email, pass);
+            promise.catch(function(e)
+            {
+                alert(e.message);
+            })
+        })
+        //registers a new user
+        $("#confirmReg").click(function(event)
+        {
+            event.preventDefault();
+            $("#zipForm").show();
+			$("#zipInput").show();
+            var email = $("#email-input").val();
+            var pass = $("#pass-input").val();
+
+			$("#register-div").hide();
+			$("#login-div").hide();            
+            //TODO: validate that both the email and password fields are valid
+            promise = auth.createUserWithEmailAndPassword(email, pass);
+            promise.catch(function(e)
+            {
+                alert(e.message);
+            })
+            promise.then(function(resolve)
+            {	
+                database.ref("/profiles").push(
+                {
+                  uid: resolve.uid,
+                  email: resolve.email,
+                  zipcode: "000000"
+                });
+            })
+        })
+
+        //this section will query data stored in a specific user
+        var ref = firebase.database().ref("profiles");
+
+        //checks to see if the user is logged in or not
+        auth.onAuthStateChanged(function(firebaseUser)
+        {
+            if(firebaseUser)
+            {
+                $("#logout").show();
+         		$("#loginOrRegister").hide();
+         		$("#zipForm").show();
+				$("#zipInput").show();
+
+            }
+            else
+            {
+                $("#logout").hide();
+                $("#loginOrRegister").show();
+            }
+        });
+        //Logs out the user
+        $("#logout").click(function(e)
+        {
+            firebase.auth().signOut();
+            $("#loginOrRegister").show();
+            $("#zipForm").hide();
+			$("#zipInput").hide();
+        })
+        
+        database.ref("/profiles").on("child_added", function(snap)
+        {
+        	currentUser = snap.key;
+        })
 
 	} //end of main
 
