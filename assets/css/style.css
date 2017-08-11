@@ -165,9 +165,9 @@ body{
 }
 
 
-.results .panel-heading {
+.panel .panel-heading {
 	overflow: auto;
-	width: auto;
+	width: 100%;
 }
 
 
@@ -220,4 +220,3 @@ html, body {
 #accountBox{
 	background-color: grey;
 	margin-top: 30px;
-}
