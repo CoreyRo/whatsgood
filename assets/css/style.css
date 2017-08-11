@@ -77,7 +77,7 @@ body{
 	box-shadow: 2px 2px 2px #888;
 }
 
-#confirmZip, #confirmAccount, #confirmReg,  .panel .panel-heading{
+#confirmZip, #confirmAccount, #confirmReg, .panel .panel-heading{
 	color: #fff;
 	background: -webkit-linear-gradient(#0af,#08c); /* Safari 5.1-6.0 */
     background: -o-linear-gradient(#0af,#08c); /* Opera 11.1-12.0 */ 
@@ -159,7 +159,11 @@ body{
 	margin-bottom: 100px;
 }
 
-.results .panel {
+.results .panel p {
+	word-wrap: break-word;
+}
+
+/*.results .panel {
 	overflow: auto;
 	width: 100%;
 }
@@ -168,7 +172,7 @@ body{
 .panel .panel-heading {
 	overflow: auto;
 	width: 100%;
-}
+}*/
 
 
 @media only screen and (max-width: 770px) {
