@@ -340,7 +340,7 @@ $(document).ready(function () {
 		});
 	}
 
-	window.initEvents = function(lat, lng, locations, indexAr, numOfMeetups) {
+		window.initEvents = function(lat, lng, locations, indexAr, numOfMeetups) {
 		map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 10,
 			center: new google.maps.LatLng(lat, lng),
@@ -405,7 +405,6 @@ $(document).ready(function () {
 		
 		});
 
-		
 	}
 
 	window.initFood = function(lat, lng, zipcode, type) {
@@ -448,6 +447,7 @@ $(document).ready(function () {
 	        }
 
 	        function createMarker(place) {
+	            var open = "";
 	            var placeLoc = place.geometry.location;
 	            var marker = new google.maps.Marker({
 	                map: map,
@@ -455,8 +455,23 @@ $(document).ready(function () {
 	                position: place.geometry.location
 	            });
 
+	          	if( typeof place.opening_hours === "undefined") {
+
+				open = "N/A";
+				}
+				else {
+
+					if(place.opening_hours.open_now === true) {
+					open = "Yes";
+					}
+					else {
+					open = "No";
+					}
+
+				}
+
 	            google.maps.event.addListener(marker, 'click', function() {
-	                infowindow.setContent(place.name);
+	                infowindow.setContent("<strong>" + place.name + "</strong><br>Address: " + place.vicinity + "<br>Rating: " + place.rating + "<br>Open: " + open );
 	                infowindow.open(map, this);
 	            });
 	        }
