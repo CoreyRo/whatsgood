@@ -153,7 +153,9 @@ body{
 	box-shadow: 4px 4px 6px #888;
   	height: 600px;
     width: 100%;
-    margin: 50px 0px 50px 0px;
+    margin-top:50px;
+    margin-bottom:50px;
+    
 }
 #new-zip-input{
 	margin-bottom: 100px;
@@ -167,7 +169,8 @@ body{
 		box-shadow: 4px 4px 6px #888;
 	  	height: 400px;
 	    width: 80%;
-	    margin: 50px 0px 50px -40px;
+	    margin-top:50px;
+    margin-bottom:50px;
     }
 }
 
@@ -178,16 +181,12 @@ body{
 		box-shadow: 4px 4px 6px #888;
 	  	height: 400px;
 	    width: 80%;
-	    margin: 50px 0px 50px -35px;
+	    margin-top:50px;
+    margin-bottom:50px;
     }
 }
 
-      /* Optional: Makes the sample page fill the window. */
-html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+
 #floating-panel {
         position: absolute;
         top: 10px;
