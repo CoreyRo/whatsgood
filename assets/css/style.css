@@ -159,6 +159,18 @@ body{
 	margin-bottom: 100px;
 }
 
+.results .panel {
+	overflow: auto;
+	width: 100%;
+}
+
+
+.panel .panel-heading {
+	overflow: auto;
+	width: 100%;
+}
+
+
 @media only screen and (max-width: 770px) {
     #map, #loadImg {
     	
