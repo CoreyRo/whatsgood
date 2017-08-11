@@ -1,9 +1,11 @@
 $(document).ready(function () {
 	// hide directory screen
-	$("#directory").hide()
-	$("#login-div").hide()
-	$("#register-div").hide()
+	$("#brandH1").hide();
+	$("#directory").hide();
+	$("#login-div").hide();
+	$("#register-div").hide();
 	$(".loading").hide();
+	$("#zip-input-row, #login-register").hide();
 
 	//for the animate.css library
 	$.fn.extend({
@@ -15,6 +17,19 @@ $(document).ready(function () {
 			return this;
 		}
 	});
+
+	setTimeout(brandAni, 600);
+
+	function brandAni() {
+		$("#brandH1").show().animateCss("bounceIn");
+		setTimeout(zipAni, 600)
+
+		function zipAni() {
+			$("#zip-input-row, #login-register").show().animateCss("fadeIn")
+		}
+
+	}
+
 	// main function for running app
 	function MainProgram() {
 		// Initialize Firebase
@@ -27,13 +42,17 @@ $(document).ready(function () {
 		var locations = [];
 		//array of food locations
 		var foodLocations = [];
-		//Number of returned events
-		var numOfMeetups = 50;
+
+		var numOfMeetups = 0;
 		//Initial Lat
 		var lat;
 		//Initial Long
 		var lng;
 		//firebase configuration
+		var type;
+
+		var indexAr = [];
+
 		config = 
 		{
 			apiKey: "AIzaSyDrsI6iSQqpK66S3C_SDd3UIzGaECV6tqY",
@@ -104,26 +123,102 @@ $(document).ready(function () {
 			}//end of else statement
 
 		});//end of onclick
-		
-		//meetup on click runs getevents function and appends the events from the ajax call to the map
-		$("#meetupBtn").on("click", function() {
 
-			$("#directory").hide();
-			$(".loading").show();
+		//Stores the root to the auth section
+        var auth = firebase.auth();
+        //Handles the user logging in
+        $("#confirmAccount").click(function(event)
+        {
+            event.preventDefault();
+            var email = $("#myname-input").val();
+            var pass = $("#mypass-input").val();
+            //Sign in
+            promise = auth.signInWithEmailAndPassword(email, pass);
+            promise.catch(function(e)
+            {
+                alert(e.message);
+            })
+        })
 
-			//call the getEvents function that runs an ajax call to the meetups api
-			getEvents(lat, lng, zipcode, locations, numOfMeetups);
-		});
+        //registers a new user
+        $("#confirmReg").click(function(event)
+        {
+            event.preventDefault();
+            var email = $("#email-input").val();
+            var pass = $("#pass-input").val();
+            //TODO: validate that both the email and password fields are valid
+            promise = auth.createUserWithEmailAndPassword(email, pass);
+            promise.catch(function(e)
+            {
+                alert(e.message);
+            })
+            promise.then(function(resolve)
+            {
+                database.ref("/profiles").push(
+                {
+                  uid: resolve.uid,
+                  email: resolve.email
+                });
+            })
+
+        })
+        //checks to see if the user is logged in or not
+        auth.onAuthStateChanged(function(firebaseUser)
+        {
+            if(firebaseUser)
+            {
+                $("#logout").show();
+            }
+            else
+            {
+                $("#logout").hide();
+            }
+        });
+        //Logs out the user
+        $("#logout").click(function(e)
+        {
+            firebase.auth().signOut();
+        })
+        //this section will query data stored in a specific user
+        var ref = firebase.database().ref("profiles");
+        ref.orderByChild("profiles").on("child_added", function(snapshot) 
+        {
+          console.log(snapshot.key + " was " + snapshot.val().email + " m tall");
+        });
 
 
-		//food on click runs getfood function and appends the events from the ajax call to the map
-		$("#foodBtn").on("click", function() {
+        //onClick functions...
+		$(".filters").on("click", function() {
 
-			// $("#directory").hide();
-			// $(".loading").show();
+	/*		$("#directory").hide();
+			$(".loading").show();*/
+			type = this.id;
 
-			//call the getFood function that runs an ajax call to the local google api
-			initFood(lat, lng, zipcode, locations);
+			if(type ==="exercise") {
+				type = "Outdoors & Adventure";
+			}
+
+			console.log(type);
+
+			if(type==="gas_station" || type==="bank" || type==="bus_station" || type==="gym" || type==="shopping_mall") {
+
+				initPlaces(lat, lng, zipcode, type);
+				
+			}
+			//meetup on click runs getevents function and appends the events from the ajax call to the map
+			else if(type==="Tech" || type==="Socializing" || type==="Outdoors & Adventure" || type==="Games") {
+
+				//call the getEvents function that runs an ajax call to the meetups api
+				getEvents(lat, lng, zipcode, locations, type, indexAr, numOfMeetups);
+				
+			}
+
+			else if(type==="food" || type==="restaurant" || type==="grocery_or_supermarket" || type==="meal_delivery") {
+
+				//call the getFood function that runs an ajax call to the local google api
+				initFood(lat, lng, zipcode, type);
+			}
+
 		});
 
 	
@@ -147,14 +242,14 @@ $(document).ready(function () {
 ****************************** Button Functions *********************************
 ********************************************************************************/
 
-	function getEvents(lat, lng, zip, locations, numOfMeetups) {
+	function getEvents(lat, lng, zip, locations, type, indexAr, numOfMeetups) {
 
 
 		//Jake API Key
 		var key = "4f561e404155b324d1b791c124f6221";
 		//Corey API Key
 	    //var key = "7e44766f4e7d46533d222a4d7f477b";
-		var queryUrl = "https://api.meetup.com/find/groups?key=" + key + "&zip=" + zip/* + "&only=zip,name,lon,lat,link,description&*/+"&callback=?";
+		var queryUrl = "https://api.meetup.com/find/groups?&search=" + type + "&key=" + key + "&zip=" + zip +"&callback=?";
 
 
 		//ajax call to the meetups api to grab local events
@@ -165,60 +260,35 @@ $(document).ready(function () {
 		}).done(function(response)
 		{
 			console.log(response);
+			var index = 0;
 			
-
 			//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
-			for(var i = 0; i < numOfMeetups; i++) {
+			for(var i = 0; i < response.data.length; i++) {
 
-				locations[i] = { name: response.data[i].name, lat: response.data[i].lat, lon: response.data[i].lon, link: response.data[i].link,  description: response.data[i].description};
+				if(response.data[i].category.name === type) {
+
+					indexAr[index] = i;
+					index++;
+					numOfMeetups++;
+
+
+					locations[i] = {name: response.data[i].name, lat: response.data[i].lat, lon: response.data[i].lon, link: response.data[i].link,  description: response.data[i].description, city: response.data[i].city, category: response.data[i].category.name};
+				}
+
 			}
-
+			console.log(indexAr);
 			console.log(locations);
+
 			$(".loading").hide();
 			$("#directory").show();
 
 			//initialize the map with the results from the ajax call 
-			initEvents(lat, lng, locations, numOfMeetups);
+			initEvents(lat, lng, locations, indexAr, numOfMeetups);
+
+			logResults(locations, indexAr, numOfMeetups, type);
 
 		});
 	}
-
-	// function getFood(zip, lat, lng, foodLocations, numOfFood) {
-
-	// 	//Jake API Key
-	// 	var key = "AIzaSyDSp7Qb4NI4VBu8GHbovohjdNWYaghYBpI";
-
-	// 	var queryUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&radius=10000&type=food&type=restaurant&type=cafe&type=meal_delivery&type=meal_takeaway&key=" + key +"&callback=?";
-
-	// 	//ajax call to the meetups api to grab local events
-	// 	$.getJSON(
-	// 	{
-	// 		url: queryUrl,
-	// 		method: "GET"
-	// 	}).done(function(response)
-	// 	{
-	// 		console.log(response);
-	
-	// 		//loop through the response and retrieve the latitudes and longitudes and extra info and store into an object
-	// 		for(var i = 0; i < numOfFood; i++) {
-	
-	// 			foodLocations[i] = { name: response.results[i].name, lat: response.results[i].geometry.location.lat, lon: response.results[i].geometry.location.lng,  open: response.results[i].opening_hours.open_now, photos: response.results[i].photos[0].html_attributions[0]};
-
-	// 			if(foodLocations[i].open == true) {
-	// 				foodLocations[i].open = "Yes";
-	// 			}
-	// 			else {
-	// 				foodLocations[i].open = "No";
-	// 			}
-	// 		}
-	// 		console.log(foodLocations);
-	// 		$(".loading").hide();
-	// 		$("#directory").show();
-
-	// 		//initialize the map with the results from the ajax call
-	// 		initFood(lat, lng, foodLocations, numOfFood);
-	// 	});
-	// }
 
 
 	/********************************************************************************
@@ -227,12 +297,11 @@ $(document).ready(function () {
 
 	//Append the body with a script tag essential for the google maps api
 	$("body").append('<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuXTlZpy0_PBxrTVDc9p7S_XDpdX0i7po&libraries=places&callback=initMap"></script>');
-
 	var map;
 
 	//initializes map and location based off of the zipcode input
 	window.initMap = function(lat, lng) {
-		map = new google.maps.Map(document.getElementById('map'), {
+			map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 12,
 			center: new google.maps.LatLng(lat, lng),
 			mapTypeId: 'roadmap'
@@ -240,7 +309,7 @@ $(document).ready(function () {
 		});
 	}
 
-	window.initEvents = function(lat, lng, locations, numOfMeetups) {
+	window.initEvents = function(lat, lng, locations, indexAr, numOfMeetups) {
 		map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 10,
 			center: new google.maps.LatLng(lat, lng),
@@ -265,17 +334,18 @@ $(document).ready(function () {
 
 		for(var i = 0; i < numOfMeetups; i++) {
 
+			var index = indexAr[i];
 
 			features[i] = {
-			position: new google.maps.LatLng(locations[i].lat, locations[i].lon),
+			position: new google.maps.LatLng(locations[index].lat, locations[index].lon),
 			type: 'info',
-			name: locations[i].name,
+			name: locations[index].name,
 			contentString: "<div id='content'>" +
 						   "<div id='siteNotice'>" + 
-						   "<h5 id='firstHeading' class='firstHeading'>" + String(locations[i].name) + "</h5>" +
+						   "<h5 id='firstHeading' class='firstHeading'>" + String(locations[index].name) + "</h5>" +
 						   "<div id='bodyContent'>" + 
-						   "<p>" + String(locations[i].description) + "</p>" +
-						   "Link: <a href='" + String(locations[i].link) + "'>" + String(locations[i].link) + "</a>" + 
+						   "<p>" + String(locations[index].description) + "</p>" +
+						   "Link: <a href='" + String(locations[index].link) + "'>" + String(locations[index].link) + "</a>" + 
 						   "</div>" + 
 						   "</div>"
 			};
@@ -307,16 +377,64 @@ $(document).ready(function () {
 		
 	}
 
-	window.initFood = function(lat, lng, zipcode, locations) {
+	window.initFood = function(lat, lng, zipcode, type) {
 
-		// setTimeout(foodTime,2000)
-		// function foodTime(){
-		// 	$(".loading").hide();
-		// 	$("#directory").show();
-		// }
-			console.log("clicked");
+			var filter;
 	        var map;
 	        var infowindow;
+	        initMap(lat, lng);
+
+	        function initMap(lat, lng) {
+	        	console.log(lat + "," + lng)
+	            var pyrmont = {lat,
+	            	lng};
+
+	            map = new google.maps.Map(document.getElementById('map'), {
+	                center: pyrmont,
+	                zoom: 12
+	            });
+
+	            infowindow = new google.maps.InfoWindow();
+	            var service = new google.maps.places.PlacesService(map);
+	            service.nearbySearch({
+	                location: pyrmont,
+	                radius: 8100, //about 5 miles
+	                type: [type]
+	            }, callback);
+	        }
+
+	        function callback(results, status) {
+	        	// console.log(results);
+	            if (status === google.maps.places.PlacesServiceStatus.OK) {
+	                for (var i = 0; i < results.length; i++) {
+	                    createMarker(results[i]);
+	                }
+	                console.log(results);
+	            }
+
+	             logFood(results);
+
+	        }
+
+	        function createMarker(place) {
+	            var placeLoc = place.geometry.location;
+	            var marker = new google.maps.Marker({
+	                map: map,
+
+	                position: place.geometry.location
+	            });
+
+	            google.maps.event.addListener(marker, 'click', function() {
+	                infowindow.setContent(place.name);
+	                infowindow.open(map, this);
+	            });
+	        }
+    }
+
+    window.initPlaces = function(lat, lng, zipcode, type) {
+	        var map;
+	        var infowindow;
+
 	        initMap(lat, lng);
 	        function initMap(lat, lng) {
 	        	console.log(lat + "," + lng)
@@ -333,21 +451,23 @@ $(document).ready(function () {
 	            service.nearbySearch({
 	                location: pyrmont,
 	                radius: 8100, //about 5 miles
-	                type: ['food']
+	                type: [type]
 	            }, callback);
 	        }
-	        var foodLoc = [];
+
 	        function callback(results, status) {
-	        	console.log(results);
+	        	// console.log(results);
 	            if (status === google.maps.places.PlacesServiceStatus.OK) {
 	                for (var i = 0; i < results.length; i++) {
 	                    createMarker(results[i]);
-	                    foodLoc[i] = results[i];
 	                }
+	                console.log(results);
 	            }
+
+	             logLocal(results);
+
 	        }
 
-	        console.log(foodLoc);
 	        function createMarker(place) {
 	            var placeLoc = place.geometry.location;
 	            var marker = new google.maps.Marker({
@@ -363,6 +483,140 @@ $(document).ready(function () {
 	        }
     }
 
+
+	function logResults(locations, indexAr, numOfMeetups, type) {
+
+
+		$("#table-head").empty();
+		$("#row-results").empty();
+
+		var headRow = $("<tr>");
+		var nameHead = $("<th>");
+		var typeHead = $("<th>");
+		var locHead = $("<th>");
+		var descHead = $("<th>");
+
+		nameHead.html("Meetup Title");
+		typeHead.html("Category");
+		locHead.html("Location");
+		descHead.html("Description");
+
+		headRow.append(nameHead, typeHead, locHead, descHead);
+		$("#table-head").append(headRow);
+
+
+		for (var i = 0; i < numOfMeetups; i++) {
+
+			var index = indexAr[i];
+
+			var resultsRow = $("<tr>");
+			var nameCell = $("<td>");
+			var typeCell = $("<td>");
+			var cityCell = $("<td>");
+			var descCell = $("<td>");
+
+			nameCell.html(locations[index].name);
+			typeCell.html(type);
+			cityCell.html(locations[index].city);
+			descCell.html(locations[index].description);
+
+			resultsRow.append(nameCell, typeCell, cityCell, descCell);
+			$("#row-results").append(resultsRow);
+
+		}
+	}
+
+
+	function logFood(foodLocations) {
+
+		$("#table-head").empty();
+		$("#row-results").empty();
+
+		var headRow = $("<tr>");
+		var nameHead = $("<th>");
+		var locHead = $("<th>");
+		var ratingHead = $("<th>");
+		var openHead = $("<th>");
+
+		nameHead.html("Name");
+		locHead.html("Location");
+		ratingHead.html("Rating");
+		openHead.html("Open?");
+
+		headRow.append(nameHead, locHead, ratingHead, openHead);
+		$("#table-head").append(headRow);
+
+		for (var i = 0; i < foodLocations.length; i++) {
+
+			var open = "";
+			var resultsRow = $("<tr>");
+			var nameCell = $("<td>");
+			var cityCell = $("<td>");
+			var descCell = $("<td>");
+			var openCell = $("<td>");
+
+			if( typeof foodLocations[i].opening_hours === "undefined") {
+
+				open = "N/A";
+			}
+			else {
+
+				if(foodLocations[i].opening_hours.open_now === true) {
+					open = "Yes";
+				}
+				else {
+					open = "No";
+				}
+
+			}
+
+
+			nameCell.html(foodLocations[i].name);
+			cityCell.html(foodLocations[i].vicinity);
+			descCell.html(foodLocations[i].rating);
+			openCell.html(open);
+
+			resultsRow.append(nameCell, cityCell, descCell, openCell);
+			$("#row-results").append(resultsRow);
+
+		}
+	}
+
+	function logLocal(locations) {
+
+		$("#table-head").empty();
+		$("#row-results").empty();
+
+		var headRow = $("<tr>");
+		var nameHead = $("<th>");
+		var locHead = $("<th>");
+		var ratingHead = $("<th>");
+
+		nameHead.html("Name");
+		locHead.html("Location");
+		ratingHead.html("Rating");
+
+		headRow.append(nameHead, locHead, ratingHead);
+		$("#table-head").append(headRow);
+
+		for (var i = 0; i < locations.length; i++) {
+			var resultsRow = $("<tr>");
+			var nameCell = $("<td>");
+			var cityCell = $("<td>");
+			var descCell = $("<td>");
+
+			nameCell.html(locations[i].name);
+			cityCell.html(locations[i].vicinity);
+			descCell.html(locations[i].rating);
+
+			resultsRow.append(nameCell, cityCell, descCell);
+			$("#row-results").append(resultsRow);
+
+		}
+	}
+
+
+
 	/********************************************************************************
 	****************************** Function Calls ***********************************
 	********************************************************************************/
@@ -372,12 +626,6 @@ $(document).ready(function () {
 	$(document).ajaxError(function(){
 	    $(".loading").hide()
 	    $("#loadError").append("<div class='alert alert-danger text-center'><strong>Oops! Something went wrong!</strong></div>");
-	    // setTimeout(loadError, 2000)
-	    // function loadError(){
-	    // 	window.location.reload();
-	    // }
 	});	
 
 });
-
-

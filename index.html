@@ -181,7 +181,7 @@
                                     <input type="password" class="form-control" id="mypass-input" aria-describedby="sizing-addon2">
                                 </div>
 
-                                <button class="center-block" id="confirmAccount">Create</button>
+                                <button class="center-block" id="confirmAccount">Submit</button>
                             </div>
                             <div class="col-xs-3"></div>
                         </form>
@@ -221,31 +221,70 @@
                 <div class="row">
                     <div class="col-xs-12 text-center">
                         <!-- <div class="center-block"> -->
-                        <button class="btn categoryBtns btn-large" id="localBtn">Local</button>
-                        <button class="btn categoryBtns btn-large" id="meetupBtn">Meetups</button>
-                        <button class="btn categoryBtns btn-large" id="foodBtn">Food</button>
+                        <div class="btn-group">
+						  <button class="btn btn-default categoryBtns dropdown-toggle" type="button" id="dropdownMenu1 localBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Local<span class="caret"></span></button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						    <li class="filters" id="gas_station" ><a href="#">Gas</a></li>
+						    <li class="filters" id="bank" ><a href="#">Banks</a></li>
+						    <li class="filters" id="bus_station" ><a href="#">Bus stops</a></li>
+						    <li class="filters" id="gym" ><a href="#">Gym</a></li>
+						    <li class="filters" id="shopping_mall" ><a href="#">Mall</a></li>
+						  </ul>
+						</div>
+                        <div class="btn-group">
+						  <button class="btn btn-default categoryBtns dropdown-toggle" type="button" id="dropdownMenu1 meetupBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Meetups<span class="caret"></span></button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						    <li class="filters" id="Tech" ><a href="#">Tech</a></li>
+						    <li class="filters" id="Socializing" ><a href="#">Social</a></li>
+						    <li class="filters" id="exercise" ><a href="#">Outdoors & Adventure</a></li>
+						    <li class="filters" id="Games" ><a href="#">Games</a></li>
+						  </ul>
+						</div>
+                        <div class="btn-group">
+						  <button class="btn btn-default categoryBtns dropdown-toggle" type="button" id="dropdownMenu1 foodBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Food<span class="caret"></span></button>
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						    <li class="filters" id="food" ><a>All</a></li>
+						    <li class="filters" id="restaurant" ><a>Restaurants</a></li>
+						    <li class="filters" id="grocery_or_supermarket" ><a>Supermarket</a></li>
+						    <li class="filters" id="meal_delivery" ><a>Delivery</a></li>
+						  </ul>
+						</div>
                         <!-- </div> -->
 
                     </div>
                 </div>
 
-                <div class="row">
-                    
-                    <div class="col-xs-12 center-block" id="map"></div>
-                    
+                <div class="row center-block">
+                    <div class="col-xs-2"></div>
+                    <div class="col-xs-6 center-block" id="map"></div>
+                    <div class="col-xs-2"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12" id="new-zip-input"></div>
                 </div>
+
                 <div class="row">
                     <div class="col-xs-12 results">
-
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Results</h3>
+                            </div>
+                            <div class="panel-body col-xs-12">
+                                <table class="table" id="table-results">
+                                    <thead id="table-head">
+                                    </thead>
+                                <tbody id="row-results"></tbody>  
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
 
             </div>
         </div>
+
+
     </body>
 
 </html>
