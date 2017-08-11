@@ -1,5 +1,5 @@
 $(document).ready(function () {
-	// hide directory screen
+// hide directory screen
 	$("#brandH1").hide();
 	$("#directory").hide();
 	$("#login-div").hide();
@@ -9,6 +9,7 @@ $(document).ready(function () {
 	$("#zipForm").hide();
 	$("#zipInput").hide();
 	$("#logout").hide();
+	$(".panel").hide();
 
 	//for the animate.css library
 	$.fn.extend({
@@ -138,6 +139,8 @@ $(document).ready(function () {
         //onClick functions...
 		$(".filters").on("click", function() {
 
+			$(".panel").show();
+
 	/*		$("#directory").hide();
 			$(".loading").show();*/
 			type = this.id;
@@ -172,6 +175,7 @@ $(document).ready(function () {
 	
 		$("#newReg").on("click", function () {
 			event.preventDefault();
+			$("#errorDiv").empty();
 			$("#login-div").hide();
 			$("#register-div").show().animateCss("slideInUp");
 		})
@@ -179,6 +183,7 @@ $(document).ready(function () {
 
 		$("#logBtn").on("click", function () {
 			event.preventDefault();
+			$("#errorDiv").empty();
 			$("#register-div").hide();
 			$("#login-div").show().animateCss("slideInUp");
 		})
@@ -191,38 +196,57 @@ $(document).ready(function () {
         $("#confirmAccount").click(function(event)
         {
             event.preventDefault();
-            $("#zipForm").show();
-			$("#zipInput").show();
-			$("#register-div").hide();
-			$("#login-div").hide();  
+ 
             var email = $("#myname-input").val();
             var pass = $("#mypass-input").val();
             //Sign in
-            promise = auth.signInWithEmailAndPassword(email, pass);
+            var promise = auth.signInWithEmailAndPassword(email, pass);
+
+            promise.then(function(e) {
+            	console.log(e);
+            	$("#zipForm").show();
+				$("#zipInput").show();
+				$("#register-div").hide();
+				$("#login-div").hide();
+				$("#errorDiv").empty(); 
+
+            })
+
             promise.catch(function(e)
             {
-                alert(e.message);
+            	$("#email-input").val("");
+            	$("#pass-input").val("");
+            	$("#errorDiv").append("<div class='alert alert-danger text-center'><strong>" + e.message + "</strong></div>");
+                console.log("error", e);
+
+
             })
+        
+ 
         })
         //registers a new user
         $("#confirmReg").click(function(event)
         {
             event.preventDefault();
-            $("#zipForm").show();
-			$("#zipInput").show();
             var email = $("#email-input").val();
             var pass = $("#pass-input").val();
-
-			$("#register-div").hide();
-			$("#login-div").hide();            
+           
             //TODO: validate that both the email and password fields are valid
-            promise = auth.createUserWithEmailAndPassword(email, pass);
+            var promise = auth.createUserWithEmailAndPassword(email, pass);
             promise.catch(function(e)
             {
-                alert(e.message);
+            	$("#email-input").val("");
+            	$("#pass-input").val("");
+   				$("#errorDiv").append("<div class='alert alert-danger text-center'><strong>" + e.message + "</strong></div>");
             })
             promise.then(function(resolve)
             {	
+            	$("#zipForm").show();
+				$("#zipInput").show();
+				$("#register-div").hide();
+				$("#login-div").hide();
+				$("#errorDiv").empty();
+
                 database.ref("/profiles").push(
                 {
                   uid: resolve.uid,
@@ -245,6 +269,7 @@ $(document).ready(function () {
          		$("#zipForm").show();
 				$("#zipInput").show();
 
+
             }
             else
             {
@@ -259,6 +284,7 @@ $(document).ready(function () {
             $("#loginOrRegister").show();
             $("#zipForm").hide();
 			$("#zipInput").hide();
+
         })
         
         database.ref("/profiles").on("child_added", function(snap)
@@ -267,6 +293,8 @@ $(document).ready(function () {
         })
 
 	} //end of main
+
+
 
 
 /********************************************************************************
@@ -340,7 +368,7 @@ $(document).ready(function () {
 		});
 	}
 
-		window.initEvents = function(lat, lng, locations, indexAr, numOfMeetups) {
+	window.initEvents = function(lat, lng, locations, indexAr, numOfMeetups) {
 		map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 10,
 			center: new google.maps.LatLng(lat, lng),
@@ -405,6 +433,7 @@ $(document).ready(function () {
 		
 		});
 
+		
 	}
 
 	window.initFood = function(lat, lng, zipcode, type) {
@@ -447,7 +476,7 @@ $(document).ready(function () {
 	        }
 
 	        function createMarker(place) {
-	            var open = "";
+	                    	var open = "";
 	            var placeLoc = place.geometry.location;
 	            var marker = new google.maps.Marker({
 	                map: map,
@@ -515,7 +544,7 @@ $(document).ready(function () {
 	        }
 
 	        function createMarker(place) {
-	            var open = "";
+	        	var open = "";
 	            var placeLoc = place.geometry.location;
 	            var marker = new google.maps.Marker({
 	                map: map,
@@ -546,7 +575,7 @@ $(document).ready(function () {
     }
 
 
-		function logResults(locations, indexAr, numOfMeetups, type) {
+	function logResults(locations, indexAr, numOfMeetups, type) {
 
 
 		$("#table-head").empty();
@@ -659,12 +688,14 @@ $(document).ready(function () {
 		var nameHead = $("<th>");
 		var locHead = $("<th>");
 		var ratingHead = $("<th>");
+		var openHead = $("<th>");
 
 		nameHead.html("Name");
 		locHead.html("Location");
 		ratingHead.html("Rating");
+		openHead.html("Open");
 
-		headRow.append(nameHead, locHead, ratingHead);
+		headRow.append(nameHead, locHead, ratingHead, openHead);
 		$("#table-head").append(headRow);
 
 		for (var i = 0; i < locations.length; i++) {
@@ -672,7 +703,8 @@ $(document).ready(function () {
 			var nameCell = $("<td>");
 			var cityCell = $("<td>");
 			var descCell = $("<td>");
-			
+			var openCell = $("<td>");
+
 			if( typeof locations[i].opening_hours === "undefined") {
 
 				open = "N/A";
@@ -691,8 +723,9 @@ $(document).ready(function () {
 			nameCell.html(locations[i].name);
 			cityCell.html(locations[i].vicinity);
 			descCell.html(locations[i].rating);
+			openCell.html(open);
 
-			resultsRow.append(nameCell, cityCell, descCell);
+			resultsRow.append(nameCell, cityCell, descCell, openCell);
 			$("#row-results").append(resultsRow);
 
 		}
