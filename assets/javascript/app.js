@@ -79,7 +79,9 @@ $(document).ready(function () {
 		{
 			//prevent page refresh
 			event.preventDefault();
-
+			//makes sure weather divss
+			$("#cityDiv").empty();
+			$("#weatherDiv").empty();
 			//Error check the zip input to make sure the zipcode is valid length
 			if($("#zip-input").val() == "" || $("#zip-input").val().length != 5) {
 				$("#zipError").empty();
@@ -756,6 +758,7 @@ $(document).ready(function () {
 					$("#cityDiv").append(cityH1);
 					weatherDiv.append(weatherTemp).append(weatherDesc)
 					$("#weather").append(weatherDiv)
+
 				});
 	}
 
