@@ -215,8 +215,8 @@ a.navText {
 		overflow: hidden;
 		box-shadow: 4px 4px 6px #888;
 	  	height: 600px;
-	    width: 100%;
-	    
+	    width: 80%;
+	    margin: 50px 0px 50px -25px;
     }
     #cityName{
 	text-align: center;
@@ -252,8 +252,8 @@ a.navText {
 		overflow: hidden;
 		box-shadow: 4px 4px 6px #888;
 	  	height: 400px;
-	    width: 100%;
-	   
+	    width: 80%;
+	   	margin: 50px 0px 50px -15px;
     }
     #cityName{
 	text-align: center;
@@ -309,3 +309,4 @@ html, body {
 #accountBox{
 	background-color: grey;
 	margin-top: 30px;
+}
