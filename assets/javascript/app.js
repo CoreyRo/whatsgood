@@ -198,7 +198,8 @@ $(document).ready(function () {
         $("#confirmAccount").click(function(event)
         {
             event.preventDefault();
- 
+			$("#errorDiv").empty();
+
             var email = $("#myname-input").val();
             var pass = $("#mypass-input").val();
             //Sign in
@@ -230,6 +231,8 @@ $(document).ready(function () {
         $("#confirmReg").click(function(event)
         {
             event.preventDefault();
+			$("#errorDiv").empty();
+
             var email = $("#email-input").val();
             var pass = $("#pass-input").val();
            
