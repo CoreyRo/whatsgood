@@ -118,7 +118,7 @@ $(document).ready(function () {
 
 					console.log(lat);
 					console.log(lng);
-
+					weatherFunc(lat,lng);
 					initMap(lat, lng);
 					$("#zip-input-row").appendTo("#new-zip-input");
 
@@ -731,6 +731,33 @@ $(document).ready(function () {
 		}
 	}
 
+	function weatherFunc(lat, lng){
+		var key = "c74cda8219ca43b08eae98851117cc2a";
+		var queryUrl = 'https://api.weatherbit.io/v1.0/current?lat=' + lat + '&lon=' + lng + '&units=I&key=' + key;
+		$.ajax({
+					url: queryUrl,
+					method: "GET"
+				}).done(function(response){
+					console.log(response);
+					console.log(response.data[0].city_name + ", " + response.data[0].state_code);
+					console.log(response.data[0].app_temp + "°F");
+					console.log(response.data[0].weather.description)
+
+					var weatherDiv = $("<div>");
+					var cityH1 = $("<h1 id='cityName'>");
+					cityH1.text(response.data[0].city_name);
+					var weatherTemp = $("<span id='temp' class='inline-block'>");
+					var weatherDesc = $("<span id='weatherDesc' class='inline-block'>");
+					weatherTemp.text(response.data[0].temp + "\u00B0F ")
+					weatherDesc.text(response.data[0].weather.description)
+					
+
+					weatherDiv.addClass("col-xs-12");
+					$("#cityDiv").append(cityH1);
+					weatherDiv.append(weatherTemp).append(weatherDesc)
+					$("#weather").append(weatherDiv)
+				});
+	}
 
 
 	/********************************************************************************
