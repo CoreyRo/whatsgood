@@ -81,7 +81,7 @@ $(document).ready(function () {
 			event.preventDefault();
 			//makes sure weather divss
 			$("#cityDiv").empty();
-			$("#weatherDiv").empty();
+			$("#weather").empty();
 			//Error check the zip input to make sure the zipcode is valid length
 			if($("#zip-input").val() == "" || $("#zip-input").val().length != 5) {
 				$("#zipError").empty();
